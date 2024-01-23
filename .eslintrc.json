@@ -1,3 +1,32 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": "next/core-web-vitals",
+  "rules": {
+    "import/no-extraneous-dependencies": "off",
+    "react/destructuring-assignment": "off",
+    "import/prefer-default-export": "off",
+    "jsx-a11y/anchor-is-valid": "off",
+    "no-underscore-dangle": "off",
+    "arrow-body-style": ["error", "as-needed"],
+    "import/extensions": "off",
+    "no-unused-vars": "error",
+    "linebreak-style": "off",
+    "@typescript-eslint/indent": "off",
+    "no-duplicate-imports": "error",
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          "builtin",
+          "type",
+          "external",
+          "internal",
+          "parent",
+          "sibling",
+          "index",
+          "object"
+        ],
+        "newlines-between": "always"
+      }
+    ]
+  }
 }

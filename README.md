@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# TEST-TASK FOR DEV
 
-## Getting Started
+# UXMind test task
 
-First, run the development server:
+The goal is to develop a (yet another) basic TODO application. Basic feature requirements are:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Task must have at least name, description and due date fields
+- See the list of the tasks
+- Filter the tasks by name & description
+- Create/modify/delete a task
+- Add comments to the task
+- Each task should be shareable via URL
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Optional
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Add an ability to link a public github repo (e.g 'vercel/next.js') to a task
+- Create a route where I can view some repo metadata (e.g README file) along with the related tasks
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+You have the freedom to choose the visual look, user flow, etc. Try to build it a way that you _as a user_ will be comfortable with.
+Of course don't forget about web standards, semantics, and make sure it's responsive.
 
-## Learn More
+## Technology stack
 
-To learn more about Next.js, take a look at the following resources:
+Required:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- NextJS (App Router!): React Server Components, server-side rendering, caching, loading states. Try to not opt into client-side rendering/data-fetching where not needed.
+- Typescript
+- Prisma - use any database under the hood (we recommend PlanetScale)
+- TailwindCSS
+- react-hook-form
+- zod (form validation, API response validation, etc.)
+- any headless UI library: HeadlessUI / RadixUI / etc.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Optional:
 
-## Deploy on Vercel
+- use shadcn-ui for components
+- use _server actions_ for mutations. Pay attention to error-handling, a library like `next-safe-action` may help here
+- bonus points if you have readable git history and commit messages: https://www.conventionalcommits.org/en/v1.0.0/
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Github repo should be public. Please deploy the app anywhere (we recommend Vercel) and attach the deployment link to a README file.
