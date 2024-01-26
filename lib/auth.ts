@@ -31,4 +31,10 @@ export const authOptions = {
       from: process.env.EMAIL_FROM,
     }),
   ],
+  callbacks: {
+    async session({ session, user }) {
+      session.user.id = user.id;
+      return Promise.resolve(session);
+    },
+  },
 } satisfies NextAuthOptions;

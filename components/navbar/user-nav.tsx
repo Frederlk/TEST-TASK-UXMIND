@@ -12,12 +12,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-
-type UserType = {
-  name?: string | null;
-  email?: string | null;
-  image?: string | null;
-};
+import { UserType } from '@/types';
 
 function getFirstLastNameInitials(name?: string | null) {
   return name

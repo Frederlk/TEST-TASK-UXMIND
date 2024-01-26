@@ -29,10 +29,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={cn('relative bg-secondary-foreground', inter.className)}>
+      <body className={cn('bg-secondary-foreground', inter.className)}>
         <NextAuthProvider>
           <Navbar />
-          <div className="flex items-center justify-center w-screen h-screen">{children}</div>
+          <div className="flex items-center justify-center">{children}</div>
           <Toaster />
         </NextAuthProvider>
       </body>

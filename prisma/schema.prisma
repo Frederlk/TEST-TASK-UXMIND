@@ -56,3 +56,47 @@ model VerificationToken {
 
   @@unique([identifier, token])
 }
+
+model List {
+  id     String @id @default(uuid())
+  title  String
+  order  Int
+  userId String
+  tasks  Task[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum TaskStatus {
+  CREATED
+  IN_PROGRESS
+  DONE
+}
+
+model Task {
+  id          String    @id @default(uuid())
+  title       String
+  description String?   @db.Text
+  listId      String
+  list        List      @relation(fields: [listId], references: [id], onDelete: Cascade)
+  start       DateTime  @default(now())
+  end         DateTime? @updatedAt
+  comments    Comment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([listId])
+}
+
+model Comment {
+  id      String @id @default(uuid())
+  message String
+  taskId  String
+  Task    Task   @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([taskId])
+}
