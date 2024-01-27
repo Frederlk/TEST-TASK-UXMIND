@@ -1,11 +1,9 @@
 'use client';
 
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
-import { z } from 'Zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect } from 'react';
 import { format } from 'date-fns';
-import { CalendarIcon } from 'lucide-react';
+import { CalendarIcon, X } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -13,127 +11,61 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/comp
 import { cn } from '@/lib/utils';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
+import { CreateTaskSchema } from '@/actions/create-task/schema';
+import { createTask } from '@/actions/create-task';
+import { useAction } from '@/hooks/use-action';
+import { InputType } from '@/actions/create-task/types';
+import { UserType } from '@/types';
+import { Textarea } from '@/components/ui/textarea';
+import { toast } from '@/components/ui/use-toast';
 
-import { Textarea } from '../ui/textarea';
-
-const taskSchema = z.object({
-  title: z
-    .string({
-      required_error: 'Title is required',
-      invalid_type_error: 'Title is required',
-    })
-    .min(2, {
-      message: 'Title is too short',
-    }),
-  description: z.optional(
-    z
-      .string({
-        required_error: 'Description is required',
-        invalid_type_error: 'Description is required',
-      })
-      .min(2, {
-        message: 'Title is too short',
-      }),
-  ),
-  end: z.optional(
-    z.date({
-      required_error: 'Due date is required',
-      invalid_type_error: "That's not a date!",
-    }),
-  ),
-});
-
-type TaskSchema = z.infer<typeof taskSchema>;
-
-export const TaskForm = () => {
-  const form = useForm<TaskSchema>({
+export const TaskForm = ({ user }: { user: UserType }) => {
+  const form = useForm<InputType>({
     mode: 'onChange',
-    resolver: zodResolver(taskSchema),
+    resolver: zodResolver(CreateTaskSchema),
     defaultValues: {
       title: '',
       description: '',
+      startDate: undefined,
+      endDate: undefined,
+      repoId: '',
     },
   });
 
   const {
     reset,
-    formState: { isSubmitSuccessful, isSubmitting, isDirty, isValid },
+    formState: { isSubmitting, isDirty, isValid },
   } = form;
 
-  const onSubmit: SubmitHandler<TaskSchema> = async (data) => {};
-
-  useEffect(() => {
-    if (isSubmitSuccessful) {
+  const { execute } = useAction(createTask, {
+    onSuccess: (data) => {
+      toast({
+        title: `Card "${data.title}" created`,
+      });
       reset();
-    }
-  }, [isSubmitSuccessful, reset]);
+    },
+    onError: (error) => {
+      toast({
+        title: error,
+        variant: 'destructive',
+      });
+    },
+  });
+
+  const onSubmit: SubmitHandler<InputType> = async (data) => {
+    execute(data);
+  };
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-4">
-        <h2 className="text-white">Create New Task</h2>
-        <FormField
-          control={form.control}
-          name="title"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Task Title</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter title" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Task Details</FormLabel>
-              <FormControl>
-                <Textarea placeholder="Enter description" className="min-h-40" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <div className="columns-2">
-          <FormField
-            control={form.control}
-            name="end"
-            render={({ field }) => (
-              <FormItem className="flex flex-col">
-                <FormLabel>Due Date</FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant={'outline'}
-                        className={cn(
-                          'w-full pl-3 text-left font-normal',
-                          !field.value && 'text-muted-foreground',
-                        )}
-                      >
-                        {field.value ? format(field.value, 'PPP') : <span>Pick a date</span>}
-                        <CalendarIcon className="w-4 h-4 ml-auto opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={field.value}
-                      onSelect={field.onChange}
-                      disabled={(date: Date) => date < new Date()}
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col w-full h-full gap-y-4">
+        <div className="space-y-4 grow">
+          <div className="flex items-center justify-between text-white gap-x-2">
+            <h2>Create New Task</h2>
+            <Button asChild size="icon" variant="ghost" className="hover:text-red-500">
+              <X className="w-6 h-6 " />
+            </Button>
+          </div>
           <FormField
             control={form.control}
             name="title"
@@ -141,14 +73,119 @@ export const TaskForm = () => {
               <FormItem>
                 <FormLabel>Task Title</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter title" {...field} />
+                  <Input placeholder="Enter a title" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Task Details</FormLabel>
+                <FormControl>
+                  <Textarea placeholder="Enter a description" className="min-h-40" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="repoId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>GitHub Repo</FormLabel>
+                <FormControl>
+                  <Input placeholder="Select a GitHub repo" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div className="columns-2">
+            <FormField
+              control={form.control}
+              name="startDate"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Start Date</FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant="input"
+                          className={cn(
+                            'w-full pl-3 text-left font-normal text-white',
+                            !field.value && 'text-neutral-400',
+                          )}
+                        >
+                          {field.value ? (
+                            format(field.value, 'dd-LL-yyyy')
+                          ) : (
+                            <span>Pick a start date</span>
+                          )}
+                          <CalendarIcon className="w-4 h-4 ml-auto opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={field.value}
+                        onSelect={field.onChange}
+                        disabled={(date: Date) => date < new Date()}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="endDate"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>End Date</FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant="input"
+                          className={cn(
+                            'w-full pl-3 text-left font-normal text-white',
+                            !field.value && 'text-neutral-400',
+                          )}
+                        >
+                          {field.value ? (
+                            format(field.value, 'dd-LL-yyyy')
+                          ) : (
+                            <span>Pick an end date</span>
+                          )}
+                          <CalendarIcon className="w-4 h-4 ml-auto opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={field.value}
+                        onSelect={field.onChange}
+                        disabled={(date: Date) => date < new Date()}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
         </div>
-
         <Button type="submit" className="w-full" disabled={!(isDirty && isValid) || isSubmitting}>
           {isSubmitting ? 'Submitting...' : 'Create'}
         </Button>

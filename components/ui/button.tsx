@@ -13,8 +13,9 @@ const buttonVariants = cva(
         outline:
           'border border-input bg-none text-white hover:bg-accent hover:text-accent-foreground',
         secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
-        ghost: 'hover:bg-accent hover:text-accent-foreground',
+        ghost: 'text-white hover:text-primary cursor-pointer',
         link: 'text-primary underline-offset-4 hover:underline',
+        input: 'bg-neutral-800 border-none hover:text-white',
       },
       size: {
         default: 'h-10 px-4 py-2',

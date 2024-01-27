@@ -3,19 +3,11 @@
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'Zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Filter, SlidersHorizontal } from 'lucide-react';
+import { SlidersHorizontal } from 'lucide-react';
 
 import { FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 
 const filtersSchema = z.object({
   search: z.string(),
@@ -39,7 +31,7 @@ export const Filters = () => {
   return (
     <FormProvider {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="flex items-center gap-x-4">
+        <div className="flex items-center gap-x-2">
           <FormField
             control={form.control}
             name="search"
@@ -57,7 +49,7 @@ export const Filters = () => {
             <SlidersHorizontal className="w-6 h-6" />
           </Button>
 
-          <Button variant="outline">Create Task</Button>
+          <Button variant="outline">New Task</Button>
         </div>
       </form>
     </FormProvider>

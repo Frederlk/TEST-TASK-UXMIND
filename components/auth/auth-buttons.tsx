@@ -9,8 +9,8 @@ import GoogleIcon from '@/public/google.svg';
 import { Button } from '@/components/ui/button';
 
 export const AuthButtons = () => {
-  const onGoogleSignIn = () => () => signIn('google', { callbackUrl: `${window.location.origin}` });
-  const onGitHubSignIn = () => () => signIn('github', { callbackUrl: `${window.location.origin}` });
+  const onGoogleSignIn = () => () => signIn('google', { callbackUrl: '/board' });
+  const onGitHubSignIn = () => () => signIn('github', { callbackUrl: '/board' });
 
   return (
     <div className="space-y-2">

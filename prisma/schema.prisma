@@ -47,6 +47,7 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  tasks         Task[]
 }
 
 model VerificationToken {
@@ -57,44 +58,39 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-model List {
-  id     String @id @default(uuid())
-  title  String
-  order  Int
-  userId String
-  tasks  Task[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
 enum TaskStatus {
-  CREATED
+  TO_DO
+  ON_HOLD
   IN_PROGRESS
   DONE
+  ARCHIVED
 }
 
 model Task {
-  id          String    @id @default(uuid())
+  id          String     @id @default(uuid())
   title       String
-  description String?   @db.Text
-  listId      String
-  list        List      @relation(fields: [listId], references: [id], onDelete: Cascade)
-  start       DateTime  @default(now())
-  end         DateTime? @updatedAt
+  description String?    @db.Text
+  userId      String
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  startDate   DateTime?
+  endDate     DateTime?
+  status      TaskStatus @default(TO_DO)
+  progress    Int        @default(0)
   comments    Comment[]
+  repoId      String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([listId])
+  @@index([userId])
 }
 
 model Comment {
-  id      String @id @default(uuid())
-  message String
-  taskId  String
-  Task    Task   @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  id       String @id @default(uuid())
+  authorId String
+  message  String @db.Text
+  taskId   String
+  Task     Task   @relation(fields: [taskId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
 

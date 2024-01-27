@@ -7,7 +7,6 @@ import './globals.css';
 
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
-import { Navbar } from '@/components/navbar/navbar';
 import { NextAuthProvider } from '@/components/providers/next-auth-provider';
 
 const inter = Inter({
@@ -31,8 +30,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={cn('bg-secondary-foreground', inter.className)}>
         <NextAuthProvider>
-          <Navbar />
-          <div className="flex items-center justify-center">{children}</div>
+          <div className="flex items-center justify-center w-full h-screen">{children}</div>
           <Toaster />
         </NextAuthProvider>
       </body>

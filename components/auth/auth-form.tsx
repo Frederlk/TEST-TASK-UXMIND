@@ -36,12 +36,10 @@ export const AuthForm = () => {
   const onSubmit: SubmitHandler<AuthSchema> = async (data) => {
     const signInResult = await signIn('email', {
       email: data.email,
-      callbackUrl: `${window.location.origin}`,
-      redirect: false,
+      callbackUrl: '/board',
     });
 
     if (!signInResult?.ok) {
-      reset();
       return toast({
         title: 'Well this did not work...',
         description: 'Something went wrong, please try again',
