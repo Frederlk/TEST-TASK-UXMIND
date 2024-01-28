@@ -10,7 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { cn, displayDate } from '@/lib/utils';
 import { D_M_Y } from '@/constants/date-formats';
 
-export const TaskItem = ({ task }: { task: Task }) => {
+export const BoardTaskItem = ({ task }: { task: Task }) => {
   const params = useParams();
   const taskId = params.taskId as string;
 
@@ -38,12 +38,8 @@ export const TaskItem = ({ task }: { task: Task }) => {
             <b>Date:</b> {displayDate(task.startDate, D_M_Y)} - {displayDate(task.endDate, D_M_Y)}
           </div>
         </div>
-        <Badge
-          variant={taskStatusToBadgeVariant[task.status]}
-          className="justify-center text-xs md:h-container min-w-24 md:text-sm md:min-w-28"
-        >
-          In Progress
-          {/* {taskStatusToText[task.status]} */}
+        <Badge variant={taskStatusToBadgeVariant[task.status]} className="md:h-container">
+          {taskStatusToText[task.status]}
         </Badge>
       </Link>
     </li>

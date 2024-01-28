@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 import WorkInProgress from '@/public/work-in-progress.svg';
 import { authOptions } from '@/lib/auth';
-import { Public } from '@/components/home/public';
+import { Public } from '@/components/public';
 
 export default async function HomePage() {
   const session = await getServerSession(authOptions);

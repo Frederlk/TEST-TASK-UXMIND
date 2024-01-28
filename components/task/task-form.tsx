@@ -4,7 +4,8 @@ import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
 import { CalendarIcon, X } from 'lucide-react';
-import Link from 'next/link';
+import { useQueryClient } from '@tanstack/react-query';
+import { Dispatch, SetStateAction } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -17,30 +18,42 @@ import { Calendar } from '@/components/ui/calendar';
 import { CreateTask } from '@/actions/create-task/schema';
 import { createTask } from '@/actions/create-task';
 import { useAction } from '@/hooks/use-action';
-import { InputType } from '@/actions/create-task/types';
+import { InputType as CreateTaskInputType } from '@/actions/create-task/types';
+import { FullTask } from '@/types';
+import { updateTask } from '@/actions/update-task';
+import { D_M_Y } from '@/constants/date-formats';
 
-export const TaskForm = () => {
-  const form = useForm<InputType>({
+interface TaskFormActions {
+  task?: FullTask;
+  isEditing?: boolean;
+  setIsEditing?: Dispatch<SetStateAction<boolean>>;
+}
+
+export const TaskForm = ({ task, isEditing, setIsEditing }: TaskFormActions) => {
+  const formIsDisabled = task && !isEditing;
+
+  const form = useForm<CreateTaskInputType>({
     mode: 'onChange',
     resolver: zodResolver(CreateTask),
     defaultValues: {
-      title: '',
-      description: '',
-      startDate: undefined,
-      endDate: undefined,
-      repoId: '',
+      title: task?.title || '',
+      description: task?.description || '',
+      startDate: task?.startDate ? new Date(task?.startDate) : undefined,
+      endDate: task?.endDate ? new Date(task?.endDate) : undefined,
+      repoId: task?.repoId || '',
     },
   });
 
   const {
     reset,
-    formState: { isSubmitting, isDirty, isValid },
+    formState: { isSubmitting, isValid },
   } = form;
 
-  const { execute, isLoading } = useAction(createTask, {
-    onSuccess: (data) => {
+  // CREATE ACTION
+  const { execute: executeCreate, isLoading: isCreating } = useAction(createTask, {
+    onSuccess: () => {
       toast({
-        title: `Card "${data.title}" created`,
+        title: 'Task Created',
       });
       reset();
     },
@@ -52,19 +65,43 @@ export const TaskForm = () => {
     },
   });
 
-  const onSubmit: SubmitHandler<InputType> = async (data) => {
-    execute(data);
+  // UPDATE ACTION
+  const queryClient = useQueryClient();
+  const { execute: executeUpdate, isLoading: isUpdating } = useAction(updateTask, {
+    onSuccess: () => {
+      toast({
+        title: 'Task Updated',
+      });
+      queryClient.invalidateQueries({ queryKey: ['task'] });
+      setIsEditing && setIsEditing(false);
+    },
+    onError: (error) => {
+      toast({
+        title: error,
+        variant: 'destructive',
+      });
+    },
+  });
+
+  const onSubmit: SubmitHandler<CreateTaskInputType> = async (data) => {
+    task
+      ? executeUpdate({
+          id: task.id,
+          ...data,
+        })
+      : executeCreate(data);
   };
+
+  const onCancelClick = () => () => {
+    reset();
+    setIsEditing && setIsEditing(false);
+  };
+
+  const isLoading = isUpdating || isCreating;
 
   return (
     <FormProvider {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 ">
-        <div className="flex items-center justify-between text-white gap-x-8">
-          <h2>Create New Task</h2>
-          <Link href="/board" className="hover:text-red-500">
-            <X className="w-6 h-6 " />
-          </Link>
-        </div>
         <FormField
           control={form.control}
           name="title"
@@ -72,7 +109,12 @@ export const TaskForm = () => {
             <FormItem>
               <FormLabel>Task Title</FormLabel>
               <FormControl>
-                <Input placeholder="Enter a title" {...field} />
+                <Input
+                  disabled={formIsDisabled}
+                  placeholder="Enter a title"
+                  className="disabled:cursor-default disabled:opacity-80"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -85,7 +127,12 @@ export const TaskForm = () => {
             <FormItem>
               <FormLabel>Task Description</FormLabel>
               <FormControl>
-                <Textarea placeholder="Enter a description" className="min-h-40" {...field} />
+                <Textarea
+                  disabled={formIsDisabled}
+                  placeholder="Enter a description"
+                  className="min-h-40 disabled:cursor-default disabled:opacity-80"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -98,7 +145,12 @@ export const TaskForm = () => {
             <FormItem>
               <FormLabel>GitHub Repo</FormLabel>
               <FormControl>
-                <Input placeholder="Select a GitHub repo" {...field} />
+                <Input
+                  disabled={formIsDisabled}
+                  placeholder="Select a GitHub repo"
+                  className="disabled:cursor-default disabled:opacity-80"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -112,20 +164,16 @@ export const TaskForm = () => {
               <FormItem>
                 <FormLabel>Start Date</FormLabel>
                 <Popover>
-                  <PopoverTrigger asChild>
+                  <PopoverTrigger disabled={formIsDisabled} asChild>
                     <FormControl>
                       <Button
                         variant="input"
                         className={cn(
-                          'w-full pl-3 text-left font-normal text-white',
+                          'w-full pl-3 text-left font-normal text-white disabled:opacity-80',
                           !field.value && 'text-neutral-400',
                         )}
                       >
-                        {field.value ? (
-                          format(field.value, 'dd-LL-yyyy')
-                        ) : (
-                          <span>Pick a start date</span>
-                        )}
+                        {field.value ? format(field.value, D_M_Y) : <span>Pick a start date</span>}
                         <CalendarIcon className="w-4 h-4 ml-auto opacity-50" />
                       </Button>
                     </FormControl>
@@ -159,20 +207,16 @@ export const TaskForm = () => {
               <FormItem>
                 <FormLabel>End Date</FormLabel>
                 <Popover>
-                  <PopoverTrigger asChild>
+                  <PopoverTrigger disabled={formIsDisabled} asChild>
                     <FormControl>
                       <Button
                         variant="input"
                         className={cn(
-                          'w-full pl-3 text-left font-normal text-white',
+                          'w-full pl-3 text-left font-normal text-white disabled:opacity-80',
                           !field.value && 'text-neutral-400',
                         )}
                       >
-                        {field.value ? (
-                          format(field.value, 'dd-LL-yyyy')
-                        ) : (
-                          <span>Pick an end date</span>
-                        )}
+                        {field.value ? format(field.value, D_M_Y) : <span>Pick an end date</span>}
                         <CalendarIcon className="w-4 h-4 ml-auto opacity-50" />
                       </Button>
                     </FormControl>
@@ -200,13 +244,20 @@ export const TaskForm = () => {
             )}
           />
         </div>
-        <Button
-          type="submit"
-          className="float-right"
-          disabled={!(isDirty && isValid) || isSubmitting || isLoading}
-        >
-          {isSubmitting || isLoading ? 'Submitting...' : 'Create task'}
-        </Button>
+        {!formIsDisabled ? (
+          <div className="flex gap-x-2 justify-end w-full">
+            <Button
+              onClick={onCancelClick()}
+              variant="outline"
+              disabled={isSubmitting || isLoading}
+            >
+              {isEditing ? 'Cancel' : 'Reset'}
+            </Button>
+            <Button type="submit" disabled={!isValid || isSubmitting || isLoading}>
+              {isSubmitting || isLoading ? 'Submitting...' : 'Submit'}
+            </Button>
+          </div>
+        ) : null}
       </form>
     </FormProvider>
   );

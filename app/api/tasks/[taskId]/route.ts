@@ -44,6 +44,10 @@ export async function GET(req: Request, { params }: { params: { taskId: string }
       },
     });
 
+    if (!task) {
+      return new NextResponse('Not Found', { status: 404 });
+    }
+
     return NextResponse.json(task);
   } catch (error) {
     return new NextResponse('Internal Error', { status: 500 });

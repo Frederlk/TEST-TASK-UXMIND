@@ -13,26 +13,25 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { UserType } from '@/types';
-import { Skeleton } from '@/components/ui/skeleton';
 import { getFirstLastNameInitials } from '@/lib/utils';
 
-export const UserNav = ({ user }: { user?: UserType }) => {
+export const BoardHeader = ({ user }: { user: UserType }) => {
   const handleSignOut = () => () => signOut({ callbackUrl: '/auth' });
 
   return (
     <div className="flex items-center justify-between gap-x-2">
       <div className="space-y-1">
         <p className="text-xs text-white">Welcome back!</p>
-        <p className="text-sm font-semibold text-primary">{user?.name}</p>
+        <p className="text-sm font-semibold text-primary">{user.name}</p>
       </div>
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button className="relative w-10 h-10 rounded-md ">
             <Avatar className="w-10 h-10 rounded-md ">
-              <AvatarImage src={user?.image || undefined} />
+              <AvatarImage src={user.image || undefined} />
               <AvatarFallback className="rounded-md bg-neutral-800 text-primary">
-                {getFirstLastNameInitials(user?.name)}
+                {getFirstLastNameInitials(user.name)}
               </AvatarFallback>
             </Avatar>
           </Button>
@@ -41,8 +40,8 @@ export const UserNav = ({ user }: { user?: UserType }) => {
         <DropdownMenuContent className="w-56" align="end" forceMount>
           <DropdownMenuLabel>
             <div className="flex flex-col space-y-1">
-              <p className="text-sm font-medium text-primary">{user?.name || 'Name'}</p>
-              <p className="text-xs text-neutral-400">{user?.email || 'Email'}</p>
+              <p className="text-sm font-medium text-primary">{user.name || 'Name'}</p>
+              <p className="text-xs text-neutral-400">{user.email || 'Email'}</p>
             </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator className="bg-neutral-400" />
@@ -51,18 +50,6 @@ export const UserNav = ({ user }: { user?: UserType }) => {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-    </div>
-  );
-};
-
-UserNav.Skeleton = function UserNavSkeleton() {
-  return (
-    <div className="flex items-center justify-between gap-x-2">
-      <div className="space-y-1">
-        <Skeleton className="w-24 h-4 bg-neutral-200" />
-        <Skeleton className="h-8 w-30 bg-neutral-200" />
-      </div>
-      <Skeleton className="w-10 h-10 bg-neutral-200" />
     </div>
   );
 };

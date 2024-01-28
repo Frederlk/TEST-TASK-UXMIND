@@ -9,7 +9,7 @@ import { db } from '@/lib/db';
 import { createSafeAction } from '@/lib/create-safe-action';
 import { authOptions } from '@/lib/auth';
 
-import { CopyTask } from './schema';
+import { UpdateTask } from './schema';
 
 const handler = async (data: InputType): Promise<ReturnType> => {
   const session = await getServerSession(authOptions);
@@ -20,39 +20,26 @@ const handler = async (data: InputType): Promise<ReturnType> => {
     };
   }
 
-  const { id } = data;
+  const { id, ...values } = data;
   let task;
 
   try {
-    const taskToCopy = await db.task.findUnique({
+    task = await db.task.update({
       where: {
         id,
       },
-    });
-
-    if (!taskToCopy) {
-      return { error: 'Task not found' };
-    }
-
-    task = await db.task.create({
       data: {
-        title: `${taskToCopy.title} - Copy`,
-        description: taskToCopy.description,
-        userId: session?.user.id,
-        startDate: taskToCopy.startDate,
-        endDate: taskToCopy.endDate,
-        repoId: taskToCopy.repoId,
-        status: taskToCopy.status,
+        ...values,
       },
     });
   } catch (error) {
     return {
-      error: 'Failed to copy.',
+      error: 'Failed to update.',
     };
   }
 
-  revalidatePath(`/board`);
+  revalidatePath(`/board/task/${id}`);
   return { data: task };
 };
 
-export const copyTask = createSafeAction(CopyTask, handler);
+export const updateTask = createSafeAction(UpdateTask, handler);

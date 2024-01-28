@@ -17,7 +17,7 @@ const filtersSchema = z.object({
 
 type FiltersSchema = z.infer<typeof filtersSchema>;
 
-export const Filters = () => {
+export const BoardFilters = () => {
   const form = useForm<FiltersSchema>({
     mode: 'onChange',
     resolver: zodResolver(filtersSchema),
