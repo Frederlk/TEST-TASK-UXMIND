@@ -1,6 +1,6 @@
 import { z } from 'Zod';
 
-export const CreateTaskSchema = z.object({
+export const CreateTask = z.object({
   title: z
     .string({
       required_error: 'Title is required',

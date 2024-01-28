@@ -1,5 +1,5 @@
 export const EmptyTask = () => (
-  <div className="w-full h-full flex flex-col justify-center">
-    <p className="text-lg text-white text-center">You haven&apos;t selected a task</p>
+  <div className="flex flex-col items-center justify-center w-full h-full">
+    <p className="text-lg text-center text-white">You haven&apos;t selected a task</p>
   </div>
 );

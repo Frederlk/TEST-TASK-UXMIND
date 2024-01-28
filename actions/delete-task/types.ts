@@ -3,7 +3,7 @@ import type { ActionState } from '@/lib/create-safe-action';
 
 import { z } from 'Zod';
 
-import { DeleteTaskSchema } from './schema';
+import { DeleteTask } from './schema';
 
-export type InputType = z.infer<typeof DeleteTaskSchema>;
+export type InputType = z.infer<typeof DeleteTask>;
 export type ReturnType = ActionState<InputType, Task>;

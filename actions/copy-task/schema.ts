@@ -1,5 +1,5 @@
 import { z } from 'Zod';
 
-export const CopyTaskSchema = z.object({
+export const CopyTask = z.object({
   id: z.string(),
 });

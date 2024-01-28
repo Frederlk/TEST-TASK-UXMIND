@@ -4,6 +4,7 @@ import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'Zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SlidersHorizontal } from 'lucide-react';
+import Link from 'next/link';
 
 import { FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
@@ -49,7 +50,9 @@ export const Filters = () => {
             <SlidersHorizontal className="w-6 h-6" />
           </Button>
 
-          <Button variant="outline">New Task</Button>
+          <Button variant="outline" asChild>
+            <Link href="/board/form">New Task</Link>
+          </Button>
         </div>
       </form>
     </FormProvider>

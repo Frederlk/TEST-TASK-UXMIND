@@ -10,7 +10,7 @@ export const List = async () => {
 
   const tasks = await db.task.findMany({
     where: {
-      userId: session?.user?.id as string,
+      userId: session?.user?.id || '',
     },
     orderBy: {
       createdAt: 'desc',

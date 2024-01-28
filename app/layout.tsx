@@ -8,6 +8,7 @@ import './globals.css';
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
 import { NextAuthProvider } from '@/components/providers/next-auth-provider';
+import { QueryProvider } from '@/components/providers/query-provider';
 
 const inter = Inter({
   subsets: ['latin', 'cyrillic', 'cyrillic-ext'],
@@ -30,8 +31,12 @@ export default function RootLayout({
     <html lang="en">
       <body className={cn('bg-secondary-foreground', inter.className)}>
         <NextAuthProvider>
-          <div className="flex items-center justify-center w-full h-screen">{children}</div>
-          <Toaster />
+          <QueryProvider>
+            <div className="flex items-center justify-center p-5 md:w-full md:h-screen">
+              {children}
+            </div>
+            <Toaster />
+          </QueryProvider>
         </NextAuthProvider>
       </body>
     </html>

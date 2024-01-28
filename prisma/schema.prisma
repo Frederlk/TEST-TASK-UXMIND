@@ -48,6 +48,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   tasks         Task[]
+  Comment       Comment[]
 }
 
 model VerificationToken {
@@ -86,13 +87,15 @@ model Task {
 }
 
 model Comment {
-  id       String @id @default(uuid())
-  authorId String
-  message  String @db.Text
-  taskId   String
-  Task     Task   @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  id      String @id @default(uuid())
+  message String @db.Text
+  taskId  String
+  Task    Task   @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  userId  String
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
 
+  @@index([userId])
   @@index([taskId])
 }

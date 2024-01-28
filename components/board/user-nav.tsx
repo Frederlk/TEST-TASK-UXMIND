@@ -14,15 +14,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { UserType } from '@/types';
 import { Skeleton } from '@/components/ui/skeleton';
-
-function getFirstLastNameInitials(name?: string | null) {
-  return name
-    ? name
-        .split(' ')
-        .map((n) => n[0])
-        .join('.')
-    : 'N/A';
-}
+import { getFirstLastNameInitials } from '@/lib/utils';
 
 export const UserNav = ({ user }: { user?: UserType }) => {
   const handleSignOut = () => () => signOut({ callbackUrl: '/auth' });
@@ -31,15 +23,15 @@ export const UserNav = ({ user }: { user?: UserType }) => {
     <div className="flex items-center justify-between gap-x-2">
       <div className="space-y-1">
         <p className="text-xs text-white">Welcome back!</p>
-        <p className="text-sm text-primary">{user?.name}</p>
+        <p className="text-sm font-semibold text-primary">{user?.name}</p>
       </div>
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button className="relative w-10 h-10 rounded-sm">
-            <Avatar className="w-10 h-10 rounded-sm">
+          <Button className="relative w-10 h-10 rounded-md ">
+            <Avatar className="w-10 h-10 rounded-md ">
               <AvatarImage src={user?.image || undefined} />
-              <AvatarFallback className="rounded-sm bg-neutral-800 text-primary">
+              <AvatarFallback className="rounded-md bg-neutral-800 text-primary">
                 {getFirstLastNameInitials(user?.name)}
               </AvatarFallback>
             </Avatar>

@@ -9,7 +9,7 @@ import { db } from '@/lib/db';
 import { createSafeAction } from '@/lib/create-safe-action';
 import { authOptions } from '@/lib/auth';
 
-import { DeleteTaskSchema } from './schema';
+import { DeleteTask } from './schema';
 
 const handler = async (data: InputType): Promise<ReturnType> => {
   const session = await getServerSession(authOptions);
@@ -39,4 +39,4 @@ const handler = async (data: InputType): Promise<ReturnType> => {
   return { data: task };
 };
 
-export const deleteCard = createSafeAction(DeleteTaskSchema, handler);
+export const deleteTask = createSafeAction(DeleteTask, handler);

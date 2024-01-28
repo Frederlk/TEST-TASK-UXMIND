@@ -1,5 +1,5 @@
 import { z } from 'Zod';
 
-export const DeleteTaskSchema = z.object({
+export const DeleteTask = z.object({
   id: z.string(),
 });

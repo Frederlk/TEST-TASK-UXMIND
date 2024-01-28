@@ -9,7 +9,7 @@ import { db } from '@/lib/db';
 import { createSafeAction } from '@/lib/create-safe-action';
 import { authOptions } from '@/lib/auth';
 
-import { CreateTaskSchema } from './schema';
+import { CreateTask } from './schema';
 
 const handler = async (data: InputType): Promise<ReturnType> => {
   const session = await getServerSession(authOptions);
@@ -45,4 +45,4 @@ const handler = async (data: InputType): Promise<ReturnType> => {
   return { data: task };
 };
 
-export const createTask = createSafeAction(CreateTaskSchema, handler);
+export const createTask = createSafeAction(CreateTask, handler);
