@@ -1,9 +1,10 @@
 'use client';
 
-import { Copy, MoreVertical, Pen, Trash, X } from 'lucide-react';
+import { Copy, Link, Link2, MoreVertical, Pen, Trash, X } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Dispatch, SetStateAction } from 'react';
+import { Task } from '@prisma/client';
 
 import {
   DropdownMenu,
@@ -15,19 +16,18 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { deleteTask } from '@/actions/delete-task';
 import { useAction } from '@/hooks/use-action';
-import { FullTask } from '@/types';
 import { toast } from '@/components/ui/use-toast';
 import { Spinner } from '@/components/ui/spinner';
 import { copyTask } from '@/actions/copy-task';
 import { cn } from '@/lib/utils';
 
-interface TaskDetailsActions {
-  task: FullTask;
-  isEditing: boolean;
-  setIsEditing: Dispatch<SetStateAction<boolean>>;
+interface TaskActionsProps {
+  task: Task;
+  isEditing?: boolean;
+  setIsEditing?: Dispatch<SetStateAction<boolean>>;
 }
 
-export const TaskDetailsActions = ({ task, isEditing, setIsEditing }: TaskDetailsActions) => {
+export const TaskActions = ({ task, isEditing, setIsEditing }: TaskActionsProps) => {
   const session = useSession();
   const router = useRouter();
 
@@ -80,7 +80,17 @@ export const TaskDetailsActions = ({ task, isEditing, setIsEditing }: TaskDetail
   }
 
   // UPDATE ACTION
-  const onEdit = () => () => setIsEditing((prev) => !prev);
+  const onEdit = () => () => {
+    setIsEditing && setIsEditing((prev) => !prev);
+  };
+
+  // SHARE ACTION
+  const onCopyURL = () => () => {
+    navigator.clipboard.writeText(`${window.location.origin}/board/task/${task.id}`);
+    toast({
+      title: 'The URL has been copied to the clipboard',
+    });
+  };
 
   return (
     <DropdownMenu>
@@ -88,7 +98,7 @@ export const TaskDetailsActions = ({ task, isEditing, setIsEditing }: TaskDetail
         <MoreVertical className="w-5 h-5 text-white cursor-pointer hover:text-primary" />
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent className="w-56" align="end" forceMount>
+      <DropdownMenuContent className="w-56" align="end">
         <DropdownMenuLabel className="text-sm font-medium">Task Actions</DropdownMenuLabel>
 
         <DropdownMenuSeparator className="bg-neutral-400" />
@@ -123,6 +133,13 @@ export const TaskDetailsActions = ({ task, isEditing, setIsEditing }: TaskDetail
               <Copy className="w-4 h-4" /> Copy
             </>
           )}
+        </DropdownMenuItem>
+
+        <DropdownMenuItem
+          onClick={onCopyURL()}
+          className="cursor-pointer flex items-center gap-x-2 "
+        >
+          <Link className="w-4 h-4" /> Share URL
         </DropdownMenuItem>
 
         {userIsAuthor ? (

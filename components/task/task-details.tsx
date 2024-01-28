@@ -5,7 +5,6 @@ import { X } from 'lucide-react';
 import { useState } from 'react';
 import { useEventListener } from 'usehooks-ts';
 
-import { Skeleton } from '@/components/ui/skeleton';
 import { FullTask } from '@/types';
 import { Separator } from '@/components/ui/separator';
 import { Comments } from '@/components/comments';
@@ -13,7 +12,7 @@ import { D_M_Y_TIME } from '@/constants/date-formats';
 import { displayDate } from '@/lib/utils';
 
 import { TaskForm } from './task-form';
-import { TaskDetailsActions } from './task-details-actions';
+import { TaskActions } from './task-actions';
 import { TaskStatusBadge } from './task-status-badge';
 
 export const TaskDetails = ({ task }: { task: FullTask }) => {
@@ -27,11 +26,11 @@ export const TaskDetails = ({ task }: { task: FullTask }) => {
   useEventListener('keydown', onKeyDown);
 
   return (
-    <div className="space-y-4 ">
+    <div className="space-y-4">
       <div className="flex items-start justify-between gap-x-4">
         <div className="flex items-center gap-x-1">
           <h2 className="text-white">{isEditing && 'Editing '} Task Details</h2>
-          <TaskDetailsActions isEditing={isEditing} setIsEditing={setIsEditing} task={task} />
+          <TaskActions task={task} isEditing={isEditing} setIsEditing={setIsEditing} />
         </div>
 
         <Link href="/board" className="text-white hover:text-red-500">
@@ -46,10 +45,10 @@ export const TaskDetails = ({ task }: { task: FullTask }) => {
       <div className="flex items-center justify-between gap-x-2">
         <div className="space-y-1 text-xs text-muted-foreground">
           <div>
-            <b>Created:</b> {displayDate(task.updatedAt, D_M_Y_TIME)} by {task.user.name}
+            <b>Updated:</b> {displayDate(task.updatedAt, D_M_Y_TIME)}
           </div>
           <div>
-            <b>Updated:</b> {displayDate(task.createdAt, D_M_Y_TIME)}
+            <b>Created:</b> {displayDate(task.createdAt, D_M_Y_TIME)} by {task.user.name}
           </div>
         </div>
 

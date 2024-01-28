@@ -130,7 +130,7 @@ export const TaskForm = ({ task, isEditing, setIsEditing }: TaskFormActions) => 
                 <Textarea
                   disabled={formIsDisabled}
                   placeholder="Enter a description"
-                  className="min-h-40 disabled:cursor-default disabled:opacity-80"
+                  className="min-h-[70dvh] md:min-h-40 disabled:cursor-default disabled:opacity-80"
                   {...field}
                 />
               </FormControl>
@@ -156,7 +156,7 @@ export const TaskForm = ({ task, isEditing, setIsEditing }: TaskFormActions) => 
             </FormItem>
           )}
         />
-        <div className="columns-2">
+        <div className="columns-2 gap-x-2">
           <FormField
             control={form.control}
             name="startDate"
@@ -245,15 +245,20 @@ export const TaskForm = ({ task, isEditing, setIsEditing }: TaskFormActions) => 
           />
         </div>
         {!formIsDisabled ? (
-          <div className="flex gap-x-2 justify-end w-full">
+          <div className="w-full flex gap-x-2 justify-end ">
             <Button
               onClick={onCancelClick()}
               variant="outline"
+              className="w-auto md:w-auto"
               disabled={isSubmitting || isLoading}
             >
               {isEditing ? 'Cancel' : 'Reset'}
             </Button>
-            <Button type="submit" disabled={!isValid || isSubmitting || isLoading}>
+            <Button
+              type="submit"
+              className="w-auto md:w-auto"
+              disabled={!isValid || isSubmitting || isLoading}
+            >
               {isSubmitting || isLoading ? 'Submitting...' : 'Submit'}
             </Button>
           </div>

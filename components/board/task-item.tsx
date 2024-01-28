@@ -1,14 +1,13 @@
 'use client';
 
-import { Task } from '@prisma/client';
 import { isBefore } from 'date-fns';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
+import { Task } from '@prisma/client';
 
-import { taskStatusToBadgeVariant, taskStatusToText } from '@/lib/display-task-status';
-import { Badge } from '@/components/ui/badge';
-import { cn, displayDate } from '@/lib/utils';
+import { cn, displayDate, displayValue } from '@/lib/utils';
 import { D_M_Y } from '@/constants/date-formats';
+import { TaskStatusBadge } from '@/components/task/task-status-badge';
 
 export const BoardTaskItem = ({ task }: { task: Task }) => {
   const params = useParams();
@@ -21,26 +20,29 @@ export const BoardTaskItem = ({ task }: { task: Task }) => {
       <Link
         href={`/board/task/${task.id}`}
         className={cn(
-          'flex justify-between transition border-2 group cursor-pointer hover:border-white border-neutral-400',
+          'block w-full p-2 space-y-2 transition border  hover:border-white border-neutral-400',
           task.id === taskId && 'border-white',
         )}
       >
-        <div className="w-full p-2 pr-8 overflow-hidden">
-          <h4
-            className={cn(
-              'mb-1 text-sm font-semibold text-white truncate transition',
-              task.id === taskId && 'text-primary',
-            )}
-          >
-            {task.title}
-          </h4>
-          <div className={cn('text-xs text-neutral-400', taskExpired && 'text-red-500')}>
-            <b>Date:</b> {displayDate(task.startDate, D_M_Y)} - {displayDate(task.endDate, D_M_Y)}
+        <h4
+          className={cn(
+            'text-sm font-semibold line-clamp-1 text-white transition',
+            task.id === taskId && 'text-primary',
+          )}
+        >
+          {task.title}
+        </h4>
+        <p className="text-xs text-neutral-400 line-clamp-2">
+          {displayValue(task.description, 'No description')}
+        </p>
+        <div className="flex items-center gap-x-2 justify-between">
+          <div className={cn('text-xs text-muted-foreground', taskExpired && 'text-red-500')}>
+            {!task.startDate && !task.endDate
+              ? 'No due dates'
+              : `${displayDate(task.startDate, D_M_Y)} - ${displayDate(task.endDate, D_M_Y)}`}
           </div>
+          <TaskStatusBadge task={task} isEdit />
         </div>
-        <Badge variant={taskStatusToBadgeVariant[task.status]} className="md:h-container">
-          {taskStatusToText[task.status]}
-        </Badge>
       </Link>
     </li>
   );

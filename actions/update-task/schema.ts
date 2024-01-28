@@ -8,6 +8,9 @@ export const UpdateTaskFormSchema = z.object({
     })
     .min(2, {
       message: 'Title is too short',
+    })
+    .max(200, {
+      message: 'Title is too long',
     }),
   description: z.optional(
     z.string({

@@ -18,7 +18,7 @@ export const BoardTaskList = async () => {
   });
 
   return (
-    <ul className="space-y-4">
+    <ul className="space-y-2">
       {tasks.map((task) => (
         <BoardTaskItem task={task} key={task.id} />
       ))}

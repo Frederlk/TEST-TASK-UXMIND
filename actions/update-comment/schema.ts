@@ -8,6 +8,9 @@ export const UpdateCommentFormSchema = z.object({
     })
     .min(2, {
       message: 'Message is too short',
+    })
+    .max(1000, {
+      message: 'Message is too long',
     }),
 });
 

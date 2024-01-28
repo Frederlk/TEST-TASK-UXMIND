@@ -65,7 +65,7 @@ export const AddCommentForm = ({ taskId }: { taskId: string }) => {
     <FormProvider {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
         <div className="flex w-full gap-x-2">
-          <Avatar className="w-8 h-8 rounded-md">
+          <Avatar className="hidden md:block w-8 h-8 rounded-md">
             <AvatarImage src={session?.data?.user.image || undefined} />
             <AvatarFallback className="rounded-md bg-neutral-800 text-primary">
               {getFirstLastNameInitials(session?.data?.user.name)}
@@ -90,7 +90,7 @@ export const AddCommentForm = ({ taskId }: { taskId: string }) => {
         </div>
         <Button
           type="submit"
-          className="float-right"
+          className="w-full md:w-auto float-right"
           disabled={!(isDirty && isValid) || isLoading || isSubmitting}
         >
           {isSubmitting || isLoading ? 'Submitting...' : 'Add comment'}

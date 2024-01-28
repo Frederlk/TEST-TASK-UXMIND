@@ -1,6 +1,6 @@
 'use client';
 
-import { TaskStatus } from '@prisma/client';
+import { Task, TaskStatus } from '@prisma/client';
 import { useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 
@@ -20,9 +20,10 @@ import {
 } from '@/components/ui/select';
 import { Spinner } from '@/components/ui/spinner';
 
-export const TaskStatusBadge = ({ task, isEdit }: { task: FullTask; isEdit?: boolean }) => {
+export const TaskStatusBadge = ({ task, isEdit }: { task: Task; isEdit?: boolean }) => {
   const session = useSession();
   const queryClient = useQueryClient();
+
   const { execute: executeUpdateStatus, isLoading: isUpdating } = useAction(updateTaskStatus, {
     onSuccess: () => {
       toast({
@@ -39,8 +40,6 @@ export const TaskStatusBadge = ({ task, isEdit }: { task: FullTask; isEdit?: boo
   });
 
   const unUpdateStatus = (value?: string) => {
-    console.log('lel');
-
     executeUpdateStatus({
       id: task.id,
       status: value as TaskStatus,
@@ -48,12 +47,7 @@ export const TaskStatusBadge = ({ task, isEdit }: { task: FullTask; isEdit?: boo
   };
 
   const badge = (
-    <Badge
-      variant={taskStatusToBadgeVariant[task.status]}
-      className={cn(isEdit ? 'min-h-14' : 'md:h-container')}
-    >
-      {taskStatusToText[task.status]}
-    </Badge>
+    <Badge variant={taskStatusToBadgeVariant[task.status]}>{taskStatusToText[task.status]}</Badge>
   );
 
   const userIsAuthor = task.userId === session?.data?.user.id;
@@ -68,15 +62,10 @@ export const TaskStatusBadge = ({ task, isEdit }: { task: FullTask; isEdit?: boo
   ));
 
   return (
-    <Select defaultValue={task.status} onValueChange={(value) => unUpdateStatus(value)}>
-      <SelectTrigger
-        className={cn(
-          'min-h-14',
-          badgeVariants({ variant: taskStatusToBadgeVariant[task.status] }),
-        )}
-      >
+    <Select value={task.status} onValueChange={(value) => unUpdateStatus(value)}>
+      <SelectTrigger className={badgeVariants({ variant: taskStatusToBadgeVariant[task.status] })}>
         {isUpdating ? (
-          <Spinner className="w-10 h-10 fill-black" />
+          <Spinner className="w-4 h-4 fill-black" />
         ) : (
           <SelectValue placeholder={taskStatusToText[task.status]} />
         )}
