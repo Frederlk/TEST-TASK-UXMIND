@@ -21,7 +21,7 @@ import { useAction } from '@/hooks/use-action';
 import { InputType as CreateTaskInputType } from '@/actions/create-task/types';
 import { FullTask } from '@/types';
 import { updateTask } from '@/actions/update-task';
-import { D_M_Y } from '@/constants/date-formats';
+import { D_M_Y } from '@/lib/date-formats';
 
 interface TaskFormActions {
   task?: FullTask;
@@ -49,12 +49,15 @@ export const TaskForm = ({ task, isEditing, setIsEditing }: TaskFormActions) => 
     formState: { isSubmitting, isValid },
   } = form;
 
+  const queryClient = useQueryClient();
+
   // CREATE ACTION
   const { execute: executeCreate, isLoading: isCreating } = useAction(createTask, {
     onSuccess: () => {
       toast({
         title: 'Task Created',
       });
+      queryClient.invalidateQueries({ queryKey: ['task'] });
       reset();
     },
     onError: (error) => {
@@ -66,7 +69,6 @@ export const TaskForm = ({ task, isEditing, setIsEditing }: TaskFormActions) => 
   });
 
   // UPDATE ACTION
-  const queryClient = useQueryClient();
   const { execute: executeUpdate, isLoading: isUpdating } = useAction(updateTask, {
     onSuccess: () => {
       toast({

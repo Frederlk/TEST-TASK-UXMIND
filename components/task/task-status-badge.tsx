@@ -4,9 +4,7 @@ import { Task, TaskStatus } from '@prisma/client';
 import { useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 
-import { taskStatusToBadgeVariant, taskStatusToText } from '@/lib/display-task-status';
-import { FullTask } from '@/types';
-import { cn } from '@/lib/utils';
+import { taskStatusToBadgeVariant, taskStatusToText } from '@/lib/task-status';
 import { Badge, badgeVariants } from '@/components/ui/badge';
 import { useAction } from '@/hooks/use-action';
 import { updateTaskStatus } from '@/actions/update-task-status';
@@ -19,6 +17,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Spinner } from '@/components/ui/spinner';
+import { STATUS_ITEMS } from '@/lib/filters';
 
 export const TaskStatusBadge = ({ task, isEdit }: { task: Task; isEdit?: boolean }) => {
   const session = useSession();
@@ -55,9 +54,9 @@ export const TaskStatusBadge = ({ task, isEdit }: { task: Task; isEdit?: boolean
     return <>{badge}</>;
   }
 
-  const options = (Object.keys(TaskStatus) as Array<TaskStatus>).map((key) => (
-    <SelectItem key={key} value={key} className="cursor-pointer">
-      {taskStatusToText[key]}
+  const options = STATUS_ITEMS.map((item) => (
+    <SelectItem key={item.id} value={item.id} className="cursor-pointer">
+      {item.label}
     </SelectItem>
   ));
 

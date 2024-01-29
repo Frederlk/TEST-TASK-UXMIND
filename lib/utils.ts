@@ -2,7 +2,7 @@ import { type ClassValue, clsx } from 'clsx';
 import { format } from 'date-fns';
 import { twMerge } from 'tailwind-merge';
 
-import { OPTIONAL_VALUE } from '@/constants';
+export const OPTIONAL_VALUE = 'N/A';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

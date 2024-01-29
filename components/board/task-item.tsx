@@ -6,7 +6,7 @@ import { useParams } from 'next/navigation';
 import { Task } from '@prisma/client';
 
 import { cn, displayDate, displayValue } from '@/lib/utils';
-import { D_M_Y } from '@/constants/date-formats';
+import { D_M_Y } from '@/lib/date-formats';
 import { TaskStatusBadge } from '@/components/task/task-status-badge';
 
 export const BoardTaskItem = ({ task }: { task: Task }) => {

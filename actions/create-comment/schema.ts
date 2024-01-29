@@ -9,7 +9,7 @@ export const CreateCommentFormSchema = z.object({
     .min(2, {
       message: 'Message is too short',
     })
-    .min(1000, {
+    .max(1000, {
       message: 'Message is too long',
     }),
 });

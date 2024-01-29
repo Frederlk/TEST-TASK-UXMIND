@@ -1,6 +1,6 @@
 'use client';
 
-import { Copy, Link, Link2, MoreVertical, Pen, Trash, X } from 'lucide-react';
+import { Copy, Link, MoreVertical, Pen, Trash, X } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Dispatch, SetStateAction } from 'react';

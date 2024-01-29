@@ -2,8 +2,8 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
+import axios, { AxiosError } from 'axios';
 
-import { fetcher } from '@/lib/fetcher';
 import { TaskDetails } from '@/components/task/task-details';
 import { FullTask } from '@/types';
 import { NotFound } from '@/components/not-found';
@@ -13,9 +13,17 @@ export default function TaskIdPage() {
   const params = useParams();
   const taskId = params.taskId as string;
 
-  const { data: task, isLoading } = useQuery<FullTask>({
+  const {
+    data: task,
+    isLoading,
+    error,
+  } = useQuery<FullTask, AxiosError>({
     queryKey: ['task', taskId],
-    queryFn: () => fetcher(`/api/tasks/${taskId}`),
+    retry: 1,
+    queryFn: async () => {
+      const response = await axios.get(`/api/tasks/${taskId}`);
+      return response.data;
+    },
   });
 
   if (isLoading) {
@@ -24,6 +32,10 @@ export default function TaskIdPage() {
         <Spinner />
       </div>
     );
+  }
+
+  if (error) {
+    return <NotFound status={error.response?.status} title={error.response?.statusText} />;
   }
 
   if (task) {

@@ -76,7 +76,6 @@ model Task {
   startDate   DateTime?
   endDate     DateTime?
   status      TaskStatus @default(TO_DO)
-  progress    Int        @default(0)
   comments    Comment[]
   repoId      String?
 

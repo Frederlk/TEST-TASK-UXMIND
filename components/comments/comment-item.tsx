@@ -7,7 +7,7 @@ import { Check, Pen, Trash, X } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 
 import { cn, displayDate, getFirstLastNameInitials } from '@/lib/utils';
-import { D_M_Y_TIME } from '@/constants/date-formats';
+import { D_M_Y_TIME } from '@/lib/date-formats';
 import { CommentWithUser } from '@/types';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAction } from '@/hooks/use-action';

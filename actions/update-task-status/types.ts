@@ -3,7 +3,7 @@ import type { ActionState } from '@/lib/create-safe-action';
 
 import { z } from 'Zod';
 
-import { UpdateTaskFormSchema } from './schema';
+import { UpdateTaskStatus } from './schema';
 
-export type InputType = z.infer<typeof UpdateTaskFormSchema>;
+export type InputType = z.infer<typeof UpdateTaskStatus>;
 export type ReturnType = ActionState<InputType, Task>;
