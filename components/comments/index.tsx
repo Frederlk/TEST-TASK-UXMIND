@@ -7,7 +7,7 @@ export const Comments = ({ task }: { task: FullTask }) => (
   <div className="space-y-4">
     <h2 className="text-white">Comments ({task.comments.length})</h2>
 
-    <CommentsList comments={task.comments} />
+    <CommentsList comments={task.comments} taskUserId={task.userId} />
 
     <AddCommentForm task={task} />
   </div>

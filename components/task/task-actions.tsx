@@ -107,7 +107,7 @@ export const TaskActions = ({ task, isEditing, setIsEditing }: TaskActionsProps)
 
         <DropdownMenuSeparator className="bg-neutral-400" />
 
-        {userIsAuthor ? (
+        {userIsAuthor && (
           <DropdownMenuItem
             onClick={onEdit()}
             className={cn(
@@ -125,7 +125,7 @@ export const TaskActions = ({ task, isEditing, setIsEditing }: TaskActionsProps)
               </>
             )}
           </DropdownMenuItem>
-        ) : null}
+        )}
 
         <DropdownMenuItem onClick={onCopy()} className="flex cursor-pointer items-center gap-x-2 ">
           {isCopying ? (
@@ -146,7 +146,7 @@ export const TaskActions = ({ task, isEditing, setIsEditing }: TaskActionsProps)
           <Link className="h-4 w-4" /> Share URL
         </DropdownMenuItem>
 
-        {userIsAuthor ? (
+        {userIsAuthor && (
           <DropdownMenuItem
             onClick={onDelete()}
             className="flex cursor-pointer items-center gap-x-2 focus:text-destructive"
@@ -161,7 +161,7 @@ export const TaskActions = ({ task, isEditing, setIsEditing }: TaskActionsProps)
               </>
             )}
           </DropdownMenuItem>
-        ) : null}
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );

@@ -26,13 +26,12 @@ import { useAction } from '@hooks/use-action';
 
 import type { CommentWithUser } from '@types';
 
-export const CommentItem = ({
-  comment,
-  taskUserId,
-}: {
+interface CommentItemProps {
   comment: CommentWithUser;
   taskUserId: string;
-}) => {
+}
+
+export const CommentItem = ({ comment, taskUserId }: CommentItemProps) => {
   const form = useForm<UpdateCommentInputType>({
     mode: 'onChange',
     resolver: zodResolver(UpdateCommentFormSchema),
@@ -136,7 +135,7 @@ export const CommentItem = ({
             <span className="hidden lg:inline-flex">({comment.user.email})</span>
           </h5>
 
-          {userIsAuthor ? (
+          {userIsAuthor && (
             <div className="flex items-center gap-x-3 lg:gap-x-1">
               <Button
                 variant="ghost"
@@ -183,7 +182,7 @@ export const CommentItem = ({
                 )}
               </Button>
             </div>
-          ) : null}
+          )}
         </div>
         {isEditing ? (
           <FormProvider {...form}>

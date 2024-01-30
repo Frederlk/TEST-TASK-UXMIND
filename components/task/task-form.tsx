@@ -166,7 +166,7 @@ export const TaskForm = ({ task, isEditing, setIsEditing }: TaskFormActions) => 
             <FormItem className="flex flex-col">
               <div className="flex items-center justify-between gap-x-2">
                 <FormLabel>GitHub Repo</FormLabel>
-                {field.value ? (
+                {!!field.value && (
                   <div
                     role="button"
                     onClick={() => onOpen(field.value || 0)}
@@ -175,7 +175,7 @@ export const TaskForm = ({ task, isEditing, setIsEditing }: TaskFormActions) => 
                     <Info className="h-4 w-4" />
                     Check repo details
                   </div>
-                ) : null}
+                )}
               </div>
               <Popover>
                 <PopoverTrigger disabled={formIsDisabled} asChild>
@@ -314,7 +314,7 @@ export const TaskForm = ({ task, isEditing, setIsEditing }: TaskFormActions) => 
             )}
           />
         </div>
-        {!formIsDisabled ? (
+        {!formIsDisabled && (
           <div className="flex w-full justify-end gap-x-2 ">
             <Button
               onClick={onCancelClick()}
@@ -332,7 +332,7 @@ export const TaskForm = ({ task, isEditing, setIsEditing }: TaskFormActions) => 
               {isSubmitting || isLoading ? 'Submitting...' : 'Submit'}
             </Button>
           </div>
-        ) : null}
+        )}
       </form>
     </FormProvider>
   );
