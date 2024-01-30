@@ -37,7 +37,7 @@ export const BoardTaskItem = ({ task }: { task: Task }) => {
           {displayValue(task.description, 'No description')}
         </p>
         <div className="flex items-center justify-between gap-x-2">
-          <div className={cn('text-xs text-muted-foreground', taskExpired && 'text-red-500')}>
+          <div className={cn('text-xs text-muted-foreground', taskExpired && 'text-destructive')}>
             {!task.startDate && !task.endDate
               ? 'No due dates'
               : `${displayDate(task.startDate, D_M_Y)} - ${displayDate(task.endDate, D_M_Y)}`}

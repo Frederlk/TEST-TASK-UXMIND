@@ -112,7 +112,7 @@ export const TaskActions = ({ task, isEditing, setIsEditing }: TaskActionsProps)
             onClick={onEdit()}
             className={cn(
               'flex cursor-pointer items-center gap-x-2',
-              isEditing && 'focus:text-red-500',
+              isEditing && 'focus:text-destructive',
             )}
           >
             {isEditing ? (
@@ -149,11 +149,11 @@ export const TaskActions = ({ task, isEditing, setIsEditing }: TaskActionsProps)
         {userIsAuthor ? (
           <DropdownMenuItem
             onClick={onDelete()}
-            className="flex cursor-pointer items-center gap-x-2 focus:text-red-500"
+            className="flex cursor-pointer items-center gap-x-2 focus:text-destructive"
           >
             {isDeleting ? (
               <>
-                <Spinner className="h-4 w-4 fill-red-500" /> Deleting...
+                <Spinner className="h-4 w-4 fill-destructive" /> Deleting...
               </>
             ) : (
               <>

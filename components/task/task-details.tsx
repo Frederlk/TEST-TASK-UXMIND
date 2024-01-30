@@ -37,7 +37,7 @@ export const TaskDetails = ({ task }: { task: FullTask }) => {
           <TaskActions task={task} isEditing={isEditing} setIsEditing={setIsEditing} />
         </div>
 
-        <Link href="/board" className="text-white hover:text-red-500">
+        <Link href="/board" className="text-white hover:text-destructive">
           <X className="h-6 w-6" />
         </Link>
       </div>

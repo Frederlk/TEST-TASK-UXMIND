@@ -162,7 +162,7 @@ export const CommentItem = ({
                 onClick={() => setIsEditing((prev) => !prev)}
                 className={cn(
                   'h-6 w-6 transition lg:invisible lg:opacity-0 lg:group-hover:visible lg:group-hover:opacity-100',
-                  isEditing && 'hover:text-red-500 lg:visible lg:opacity-100',
+                  isEditing && 'hover:text-destructive lg:visible lg:opacity-100',
                 )}
               >
                 {isEditing ? <X className="h-5 w-5 " /> : <Pen className="h-4 w-4" />}
@@ -172,12 +172,12 @@ export const CommentItem = ({
                 variant="ghost"
                 onClick={onDelete()}
                 className={cn(
-                  'h-6 w-6 lg:invisible lg:opacity-0 lg:transition lg:group-hover:visible lg:group-hover:opacity-100 lg:hover:text-red-500',
+                  'h-6 w-6 lg:invisible lg:opacity-0 lg:transition lg:group-hover:visible lg:group-hover:opacity-100 lg:hover:text-destructive',
                   isEditing && 'lg:visible lg:opacity-100',
                 )}
               >
                 {isDeleting ? (
-                  <Spinner className="h-4 w-4 fill-red-500" />
+                  <Spinner className="h-4 w-4 fill-destructive" />
                 ) : (
                   <Trash className="h-4 w-4" />
                 )}

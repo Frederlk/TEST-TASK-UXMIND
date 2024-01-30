@@ -1,6 +1,5 @@
 'use client';
 
-
 import { signOut } from 'next-auth/react';
 
 import {
@@ -48,7 +47,10 @@ export const BoardHeader = ({ user }: { user: AuthUser }) => {
             </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator className="bg-neutral-400" />
-          <DropdownMenuItem onClick={handleSignOut()} className="cursor-pointer focus:text-red-500">
+          <DropdownMenuItem
+            onClick={handleSignOut()}
+            className="cursor-pointer focus:text-destructive"
+          >
             Sign out
           </DropdownMenuItem>
         </DropdownMenuContent>
