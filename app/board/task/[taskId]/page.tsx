@@ -1,5 +1,6 @@
 import { NotFound } from '@components/not-found';
 import { TaskDetails } from '@components/task/task-details';
+
 import { getTask } from '@lib/getTask';
 
 import type { FullTask } from '@types';
