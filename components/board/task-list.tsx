@@ -34,8 +34,8 @@ export const BoardTaskList = () => {
     );
   }
 
-  if (error) {
-    return <NotFound title={error.message} />;
+  if (!data?.length) {
+    return <NotFound title="No tasks found" />;
   }
 
   return (
