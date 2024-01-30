@@ -42,6 +42,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         startDate: taskToCopy.startDate,
         endDate: taskToCopy.endDate,
         repoId: taskToCopy.repoId,
+        repoName: taskToCopy.repoName,
         status: taskToCopy.status,
       },
     });

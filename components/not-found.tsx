@@ -13,7 +13,7 @@ interface NotFoundProps {
 }
 
 export const NotFound = ({ status, title = 'Something went wrong', button }: NotFoundProps) => (
-  <div className="flex h-full w-full flex-col justify-center items-center">
+  <div className="p-5 flex h-full w-full flex-col justify-center items-center">
     {status ? (
       <p className="mb-2 text-4xl font-semibold text-center text-primary md:text-5xl">{status}</p>
     ) : null}

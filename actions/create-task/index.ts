@@ -20,7 +20,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
     };
   }
 
-  const { title, startDate, endDate, repoId, description } = data;
+  const { title, startDate, endDate, repoName, repoId, description } = data;
   const userId = session.user.id;
   let task;
 
@@ -32,6 +32,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         startDate,
         endDate,
         repoId,
+        repoName,
         userId,
       },
     });

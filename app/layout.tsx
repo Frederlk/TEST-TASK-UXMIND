@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
 import { NextAuthProvider } from '@/components/providers/next-auth-provider';
 import { QueryProvider } from '@/components/providers/query-provider';
+import { ModalProvider } from '@/components/providers/modal-provider';
 
 const inter = Inter({
   subsets: ['latin', 'cyrillic', 'cyrillic-ext'],
@@ -32,10 +33,9 @@ export default function RootLayout({
       <body className={cn('bg-secondary-foreground', inter.className)}>
         <NextAuthProvider>
           <QueryProvider>
-            <div className="flex items-center justify-center p-5 md:w-full md:h-screen">
-              {children}
-            </div>
+            {children}
             <Toaster />
+            <ModalProvider />
           </QueryProvider>
         </NextAuthProvider>
       </body>

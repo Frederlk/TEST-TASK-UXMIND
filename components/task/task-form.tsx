@@ -3,9 +3,12 @@
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
-import { CalendarIcon, X } from 'lucide-react';
-import { useQueryClient } from '@tanstack/react-query';
-import { Dispatch, SetStateAction } from 'react';
+import { CalendarIcon, Check, ChevronsUpDown, Info, LinkIcon, X } from 'lucide-react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { Dispatch, SetStateAction, useState } from 'react';
+import axios from 'axios';
+import { useDebounce } from 'usehooks-ts';
+import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -22,6 +25,11 @@ import { InputType as CreateTaskInputType } from '@/actions/create-task/types';
 import { FullTask } from '@/types';
 import { updateTask } from '@/actions/update-task';
 import { D_M_Y } from '@/lib/date-formats';
+import { useGitHubRepoDetails, useSearchGitHubRepos } from '@/hooks/use-github';
+import { useRepoModal } from '@/hooks/use-repo-modal';
+
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '../ui/command';
+import { RepoModal } from '../modals/repo-modal';
 
 interface TaskFormActions {
   task?: FullTask;
@@ -40,7 +48,8 @@ export const TaskForm = ({ task, isEditing, setIsEditing }: TaskFormActions) => 
       description: task?.description || '',
       startDate: task?.startDate ? new Date(task?.startDate) : undefined,
       endDate: task?.endDate ? new Date(task?.endDate) : undefined,
-      repoId: task?.repoId || '',
+      repoId: task?.repoId || undefined,
+      repoName: task?.repoName || '',
     },
   });
 
@@ -48,6 +57,11 @@ export const TaskForm = ({ task, isEditing, setIsEditing }: TaskFormActions) => 
     reset,
     formState: { isSubmitting, isValid },
   } = form;
+
+  const [repoQuery, setRepoQuery] = useState('');
+  const debouncedQuery = useDebounce(repoQuery, 500) || '';
+  const { isReposLoading, repos } = useSearchGitHubRepos(debouncedQuery);
+  const { onOpen } = useRepoModal();
 
   const queryClient = useQueryClient();
 
@@ -132,7 +146,10 @@ export const TaskForm = ({ task, isEditing, setIsEditing }: TaskFormActions) => 
                 <Textarea
                   disabled={formIsDisabled}
                   placeholder="Enter a description"
-                  className="min-h-[70dvh] md:min-h-40 disabled:cursor-default disabled:opacity-80"
+                  className={cn(
+                    'md:min-h-40 disabled:cursor-default disabled:opacity-80',
+                    field.value ? 'min-h-[70dvh]' : 'min-h-[30dvh]',
+                  )}
                   {...field}
                 />
               </FormControl>
@@ -144,16 +161,65 @@ export const TaskForm = ({ task, isEditing, setIsEditing }: TaskFormActions) => 
           control={form.control}
           name="repoId"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>GitHub Repo</FormLabel>
-              <FormControl>
-                <Input
-                  disabled={formIsDisabled}
-                  placeholder="Select a GitHub repo"
-                  className="disabled:cursor-default disabled:opacity-80"
-                  {...field}
-                />
-              </FormControl>
+            <FormItem className="flex flex-col">
+              <div className="flex items-center gap-x-2 justify-between">
+                <FormLabel>GitHub Repo</FormLabel>
+                {field.value ? (
+                  <div
+                    role="button"
+                    onClick={() => onOpen(field.value || 0)}
+                    className="flex text-sm text-white items-center gap-x-2 hover:text-primary transition-colors"
+                  >
+                    <Info className="w-4 h-4" />
+                    Check repo details
+                  </div>
+                ) : null}
+              </div>
+              <Popover>
+                <PopoverTrigger disabled={formIsDisabled} asChild>
+                  <FormControl>
+                    <Button
+                      variant="input"
+                      role="combobox"
+                      className={cn(
+                        'w-full font-normal text-white justify-between',
+                        !field.value && 'text-neutral-400',
+                      )}
+                    >
+                      {form.getValues('repoName') || 'Add a GitHub repo'}
+                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent align="start" className="w-56 p-0">
+                  <Command>
+                    <CommandInput onValueChange={(e) => setRepoQuery(e)} placeholder="Search..." />
+                    <CommandEmpty>
+                      {isReposLoading ? 'Loading...' : 'No repositories found'}{' '}
+                    </CommandEmpty>
+                    <CommandGroup>
+                      {repos?.map((repo: any) => (
+                        <CommandItem
+                          value={repo.label}
+                          key={repo.value}
+                          onSelect={() => {
+                            form.setValue('repoId', repo.value);
+                            form.setValue('repoName', repo.label);
+                          }}
+                        >
+                          <Check
+                            className={cn(
+                              'mr-2 h-4 w-4 shrink-0',
+                              repo.value === field.value ? 'opacity-100' : 'opacity-0',
+                            )}
+                          />
+                          {repo.label}
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </Command>
+                </PopoverContent>
+              </Popover>
               <FormMessage />
             </FormItem>
           )}

@@ -15,7 +15,10 @@ export default async function HomePage() {
 
   return (
     <main className="flex flex-col-reverse items-center justify-center w-full gap-8 mx-auto w-sceen max-w-7xl md:flex-row">
-      <Public />
+      <div className="flex items-center justify-center p-5 md:w-full md:h-screen">
+        <Public />
+      </div>
+
       <div className="flex items-center justify-center w-full p-4 bg-white md:mb-4">
         <Image src={WorkInProgress} priority className="object-contain" alt="work in progress" />
       </div>

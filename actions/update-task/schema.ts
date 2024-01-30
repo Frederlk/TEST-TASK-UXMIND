@@ -31,6 +31,12 @@ export const UpdateTaskFormSchema = z.object({
     }),
   ),
   repoId: z.optional(
+    z.number({
+      required_error: 'Repo is required',
+      invalid_type_error: 'Repo is required',
+    }),
+  ),
+  repoName: z.optional(
     z.string({
       required_error: 'Repo is required',
       invalid_type_error: 'Repo is required',

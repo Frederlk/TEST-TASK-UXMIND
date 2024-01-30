@@ -90,7 +90,7 @@ export const AddCommentForm = ({ taskId }: { taskId: string }) => {
         </div>
         <Button
           type="submit"
-          className="w-full md:w-auto float-right"
+          className="w-full md:w-auto md:float-right"
           disabled={!(isDirty && isValid) || isLoading || isSubmitting}
         >
           {isSubmitting || isLoading ? 'Submitting...' : 'Add comment'}
