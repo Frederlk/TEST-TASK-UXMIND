@@ -9,6 +9,6 @@ export const Comments = ({ task }: { task: FullTask }) => (
 
     <CommentsList comments={task.comments} />
 
-    <AddCommentForm taskId={task.id} />
+    <AddCommentForm task={task} />
   </div>
 );

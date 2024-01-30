@@ -26,27 +26,13 @@ import { useAction } from '@hooks/use-action';
 
 import type { CommentWithUser } from '@types';
 
-export const CommentItem = ({ comment }: { comment: CommentWithUser }) => {
-  // EDIT ACTION
-  const session = useSession();
-  const userIsAuthor = comment.user.id === session?.data?.user.id;
-
-  const commentRef = useRef<ElementRef<'li'>>(null);
-
-  const [isEditing, setIsEditing] = useState(false);
-  const disableEditing = () => {
-    setIsEditing(false);
-  };
-
-  const onKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'Escape') {
-      disableEditing();
-    }
-  };
-
-  useEventListener('keydown', onKeyDown);
-  useOnClickOutside(commentRef, disableEditing);
-
+export const CommentItem = ({
+  comment,
+  taskUserId,
+}: {
+  comment: CommentWithUser;
+  taskUserId: string;
+}) => {
   const form = useForm<UpdateCommentInputType>({
     mode: 'onChange',
     resolver: zodResolver(UpdateCommentFormSchema),
@@ -56,8 +42,31 @@ export const CommentItem = ({ comment }: { comment: CommentWithUser }) => {
   });
 
   const {
+    reset,
     formState: { isSubmitting, isValid },
   } = form;
+
+  const session = useSession();
+  const userIsAuthor = comment.user.id === session?.data?.user.id;
+  const userIsCreator = taskUserId === session?.data?.user.id;
+
+  const commentRef = useRef<ElementRef<'li'>>(null);
+
+  // EDIT ACTION
+  const [isEditing, setIsEditing] = useState(false);
+  const disableEditing = (shouldReset?: boolean) => {
+    shouldReset && reset();
+    setIsEditing(false);
+  };
+
+  const onKeyDown = (e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      disableEditing(true);
+    }
+  };
+
+  useEventListener('keydown', onKeyDown);
+  useOnClickOutside(commentRef, () => disableEditing(true));
 
   const queryClient = useQueryClient();
 
@@ -66,7 +75,7 @@ export const CommentItem = ({ comment }: { comment: CommentWithUser }) => {
       toast({
         title: `Comment edited`,
       });
-      queryClient.invalidateQueries({ queryKey: ['task'] });
+      userIsCreator && queryClient.invalidateQueries({ queryKey: ['task'] });
       disableEditing();
     },
     onError: (error) => {
@@ -93,7 +102,7 @@ export const CommentItem = ({ comment }: { comment: CommentWithUser }) => {
       toast({
         title: `Comment deleted`,
       });
-      queryClient.invalidateQueries({ queryKey: ['task'] });
+      userIsCreator && queryClient.invalidateQueries({ queryKey: ['task'] });
     },
     onError: (error) => {
       toast({

@@ -16,9 +16,10 @@ import { BoardTaskItem } from './task-item';
 export const BoardTaskList = () => {
   const { filters } = useFilters();
 
-  const { data, isLoading, error } = useQuery<Task[]>({
+  const { data, isLoading } = useQuery<Task[]>({
     queryKey: ['task', filters],
     retry: 1,
+    refetchOnWindowFocus: false,
     queryFn: () =>
       fetcher('/api/search', {
         method: 'POST',

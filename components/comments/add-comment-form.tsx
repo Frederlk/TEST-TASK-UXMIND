@@ -19,8 +19,11 @@ import { CreateCommentFormSchema } from '@actions/create-comment/schema';
 
 import { useAction } from '@hooks/use-action';
 
-export const AddCommentForm = ({ taskId }: { taskId: string }) => {
+import { FullTask } from '@types';
+
+export const AddCommentForm = ({ task }: { task: FullTask }) => {
   const session = useSession();
+  const userIsCreator = task.userId === session?.data?.user.id;
 
   const form = useForm<AddCommentInputType>({
     mode: 'onChange',
@@ -43,7 +46,7 @@ export const AddCommentForm = ({ taskId }: { taskId: string }) => {
         title: `Comment added`,
       });
       reset();
-      queryClient.invalidateQueries({ queryKey: ['task'] });
+      userIsCreator && queryClient.invalidateQueries({ queryKey: ['task'] });
     },
     onError: (error) => {
       toast({
@@ -56,7 +59,7 @@ export const AddCommentForm = ({ taskId }: { taskId: string }) => {
   const onSubmit: SubmitHandler<AddCommentInputType> = (data) => {
     execute({
       message: data.message,
-      taskId,
+      taskId: task.id,
     });
   };
 
