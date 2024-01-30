@@ -1,14 +1,11 @@
-
 import { NotFound } from '@components/not-found';
 import { TaskDetails } from '@components/task/task-details';
-
-import { fetcher } from '@lib/fetcher';
-import getBaseUrl from '@lib/get-base-url';
+import { getTask } from '@lib/getTask';
 
 import type { FullTask } from '@types';
 
 export default async function TaskIdPage({ params }: { params: { taskId: string } }) {
-  const task = await fetcher(getBaseUrl(`/api/tasks/${params.taskId}`));
+  const task = await getTask(params.taskId);
 
   return task ? (
     <TaskDetails task={task as FullTask} />
