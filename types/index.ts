@@ -1,6 +1,6 @@
 import { Comment, Task, User } from '@prisma/client';
 
-export type UserType = {
+export type AuthUser = {
   id?: string | null;
   name?: string | null;
   email?: string | null;

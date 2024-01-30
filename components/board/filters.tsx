@@ -1,23 +1,21 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+
 import { SlidersHorizontal } from 'lucide-react';
 import { useDebounce } from 'usehooks-ts';
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion';
-import { Label } from '@/components/ui/label';
-import { Checkbox } from '@/components/ui/checkbox';
-import { useFilters } from '@/hooks/use-filters';
-import { SEARCH_BY_ITEMS, STATUS_ITEMS } from '@/lib/filters';
+import { Input } from '@ui/input';
+import { Button } from '@ui/button';
+import { Separator } from '@ui/separator';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@ui/accordion';
+import { Label } from '@ui/label';
+import { Checkbox } from '@ui/checkbox';
+
+import { SEARCH_BY_ITEMS, STATUS_ITEMS } from '@lib/filters';
+
+import { useFilters } from '@hooks/use-filters';
 
 export const BoardFilters = () => {
   const { filters, setField, setQuery, setStatus } = useFilters();
@@ -43,7 +41,7 @@ export const BoardFilters = () => {
 
           <AccordionTrigger asChild>
             <Button variant="outline">
-              <SlidersHorizontal className="w-6 h-6 transition" />
+              <SlidersHorizontal className="h-6 w-6 transition" />
             </Button>
           </AccordionTrigger>
 
@@ -52,7 +50,7 @@ export const BoardFilters = () => {
           </Button>
         </div>
 
-        <AccordionContent className="flex gap-4 pt-2 pb-0">
+        <AccordionContent className="flex gap-4 pb-0 pt-2">
           <div className="space-y-1">
             <Label className="text-muted-foreground">Search by fields...</Label>
             {SEARCH_BY_ITEMS.map((item) => (
@@ -62,7 +60,7 @@ export const BoardFilters = () => {
                   onClick={() => setField(item.id)}
                   checked={filters.fields.includes(item.id)}
                 />
-                <Label htmlFor={item.id} className="text-sm text-white cursor-pointer">
+                <Label htmlFor={item.id} className="cursor-pointer text-sm text-white">
                   {item.label}
                 </Label>
               </div>
@@ -77,7 +75,7 @@ export const BoardFilters = () => {
                   onClick={() => setStatus(item.id)}
                   checked={filters.statuses.includes(item.id)}
                 />
-                <Label htmlFor={item.id} className="text-sm text-white cursor-pointer">
+                <Label htmlFor={item.id} className="cursor-pointer text-sm text-white">
                   {item.label}
                 </Label>
               </div>

@@ -1,25 +1,30 @@
-import { ElementRef, useRef, useState } from 'react';
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+import { type ElementRef, useRef, useState } from 'react';
+
+import type { CommentWithUser } from '@types';
+
+import { FormProvider, type SubmitHandler, useForm } from 'react-hook-form';
 import { useQueryClient } from '@tanstack/react-query';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEventListener, useOnClickOutside } from 'usehooks-ts';
 import { Check, Pen, Trash, X } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 
-import { cn, displayDate, getFirstLastNameInitials } from '@/lib/utils';
-import { D_M_Y_TIME } from '@/lib/date-formats';
-import { CommentWithUser } from '@/types';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { useAction } from '@/hooks/use-action';
-import { updateComment } from '@/actions/update-comment';
-import { UpdateCommentFormSchema } from '@/actions/update-comment/schema';
-import { InputType as UpdateCommentInputType } from '@/actions/update-comment/types';
-import { FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
-import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
-import { toast } from '@/components/ui/use-toast';
-import { deleteComment } from '@/actions/delete-comment';
-import { Spinner } from '@/components/ui/spinner';
+import { Avatar, AvatarFallback, AvatarImage } from '@ui/avatar';
+import { FormControl, FormField, FormItem, FormMessage } from '@ui/form';
+import { Textarea } from '@ui/textarea';
+import { Button } from '@ui/button';
+import { toast } from '@ui/use-toast';
+import { Spinner } from '@ui/spinner';
+
+import { cn, displayDate, getFirstLastNameInitials } from '@lib/utils';
+import { D_M_Y_TIME } from '@lib/date-formats';
+
+import { updateComment } from '@actions/update-comment';
+import { UpdateCommentFormSchema } from '@actions/update-comment/schema';
+import { InputType as UpdateCommentInputType } from '@actions/update-comment/types';
+import { deleteComment } from '@actions/delete-comment';
+
+import { useAction } from '@hooks/use-action';
 
 export const CommentItem = ({ comment }: { comment: CommentWithUser }) => {
   // EDIT ACTION
@@ -107,8 +112,8 @@ export const CommentItem = ({ comment }: { comment: CommentWithUser }) => {
   };
 
   return (
-    <li className="flex w-full gap-x-2 group" ref={commentRef}>
-      <Avatar className="w-8 h-8 rounded-md">
+    <li className="group flex w-full gap-x-2" ref={commentRef}>
+      <Avatar className="h-8 w-8 rounded-md">
         <AvatarImage src={comment.user.image || undefined} />
         <AvatarFallback className="rounded-md bg-neutral-800 text-primary">
           {getFirstLastNameInitials(comment.user.name)}
@@ -116,29 +121,29 @@ export const CommentItem = ({ comment }: { comment: CommentWithUser }) => {
       </Avatar>
 
       <div className="w-full space-y-1">
-        <div className="flex items-center justify-between h-6 -mt-1.5">
+        <div className="-mt-1.5 flex h-6 items-center justify-between">
           <h5 className="text-sm leading-none text-white">
             <span className="font-semibold">{comment.user.name}</span>{' '}
-            <span className="hidden md:inline-flex">({comment.user.email})</span>
+            <span className="hidden lg:inline-flex">({comment.user.email})</span>
           </h5>
 
           {userIsAuthor ? (
-            <div className="flex items-center gap-x-3 md:gap-x-1">
+            <div className="flex items-center gap-x-3 lg:gap-x-1">
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => form.handleSubmit(onSubmit)()}
                 disabled={isUpdating || isSubmitting || !isValid}
                 className={cn(
-                  'invisible w-6 h-6 transition opacity-0',
-                  isEditing && 'opacity-100 visible',
-                  isValid && 'md:hover:text-green-500',
+                  'invisible h-6 w-6 opacity-0 transition',
+                  isEditing && 'visible opacity-100',
+                  isValid && 'lg:hover:text-green-500',
                 )}
               >
                 {isUpdating || isSubmitting ? (
-                  <Spinner className="w-4 h-4 fill-green-500" />
+                  <Spinner className="h-4 w-4 fill-green-500" />
                 ) : (
-                  <Check className="w-5 h-5" />
+                  <Check className="h-5 w-5" />
                 )}
               </Button>
 
@@ -147,25 +152,25 @@ export const CommentItem = ({ comment }: { comment: CommentWithUser }) => {
                 size="icon"
                 onClick={() => setIsEditing((prev) => !prev)}
                 className={cn(
-                  'md:invisible w-6 h-6 transition md:opacity-0 md:group-hover:opacity-100 md:group-hover:visible',
-                  isEditing && 'md:opacity-100 md:visible hover:text-red-500',
+                  'h-6 w-6 transition lg:invisible lg:opacity-0 lg:group-hover:visible lg:group-hover:opacity-100',
+                  isEditing && 'hover:text-red-500 lg:visible lg:opacity-100',
                 )}
               >
-                {isEditing ? <X className="w-5 h-5 " /> : <Pen className="w-4 h-4" />}
+                {isEditing ? <X className="h-5 w-5 " /> : <Pen className="h-4 w-4" />}
               </Button>
               <Button
                 size="icon"
                 variant="ghost"
                 onClick={onDelete()}
                 className={cn(
-                  'w-6 h-6 md:invisible md:transition md:opacity-0 md:group-hover:opacity-100 md:group-hover:visible md:hover:text-red-500',
-                  isEditing && 'md:opacity-100 md:visible',
+                  'h-6 w-6 lg:invisible lg:opacity-0 lg:transition lg:group-hover:visible lg:group-hover:opacity-100 lg:hover:text-red-500',
+                  isEditing && 'lg:visible lg:opacity-100',
                 )}
               >
                 {isDeleting ? (
-                  <Spinner className="w-4 h-4 fill-red-500" />
+                  <Spinner className="h-4 w-4 fill-red-500" />
                 ) : (
-                  <Trash className="w-4 h-4" />
+                  <Trash className="h-4 w-4" />
                 )}
               </Button>
             </div>
@@ -182,7 +187,7 @@ export const CommentItem = ({ comment }: { comment: CommentWithUser }) => {
                     <FormControl>
                       <Textarea
                         placeholder="Your message"
-                        className="resize-none min-h-20"
+                        className="min-h-20 resize-none"
                         {...field}
                       />
                     </FormControl>
@@ -193,7 +198,7 @@ export const CommentItem = ({ comment }: { comment: CommentWithUser }) => {
             </form>
           </FormProvider>
         ) : (
-          <p className="text-sm text-neutral-400 whitespace-break-spaces">{comment.message}</p>
+          <p className="whitespace-break-spaces text-sm text-neutral-400">{comment.message}</p>
         )}
 
         <div className="text-xs text-muted-foreground">

@@ -1,46 +1,17 @@
-'use client';
+import type { FullTask } from '@types';
 
-import { useQuery } from '@tanstack/react-query';
-import { useParams } from 'next/navigation';
-import axios, { AxiosError } from 'axios';
+import { NotFound } from '@components/not-found';
+import { TaskDetails } from '@components/task/task-details';
 
-import { TaskDetails } from '@/components/task/task-details';
-import { FullTask } from '@/types';
-import { NotFound } from '@/components/not-found';
-import { Spinner } from '@/components/ui/spinner';
+import { fetcher } from '@lib/fetcher';
+import getBaseUrl from '@lib/get-base-url';
 
-export default function TaskIdPage() {
-  const params = useParams();
-  const taskId = params.taskId as string;
+export default async function TaskIdPage({ params }: { params: { taskId: string } }) {
+  const task = await fetcher(getBaseUrl(`/api/tasks/${params.taskId}`));
 
-  const {
-    data: task,
-    isLoading,
-    error,
-  } = useQuery<FullTask, AxiosError>({
-    queryKey: ['task', taskId],
-    retry: 1,
-    queryFn: async () => {
-      const response = await axios.get(`/api/tasks/${taskId}`);
-      return response.data;
-    },
-  });
-
-  if (isLoading) {
-    return (
-      <div className="w-full h-full flex flex-col items-center justify-center">
-        <Spinner />
-      </div>
-    );
-  }
-
-  if (error) {
-    return <NotFound status={error.response?.status} title={error.response?.statusText} />;
-  }
-
-  if (task) {
-    return <TaskDetails task={task} />;
-  }
-
-  return <NotFound status="404" title="Task Not Found" />;
+  return task ? (
+    <TaskDetails task={task as FullTask} />
+  ) : (
+    <NotFound status="404" title="Task Not Found" />
+  );
 }

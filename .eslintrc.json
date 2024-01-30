@@ -24,7 +24,55 @@
           "index",
           "object"
         ],
-        "newlines-between": "always"
+        "pathGroups": [
+          {
+            "pattern": "react",
+            "group": "builtin",
+            "position": "before"
+          },
+          {
+            "pattern": "next",
+            "group": "builtin",
+            "position": "before"
+          },
+          {
+            "pattern": "@components/**",
+            "group": "external",
+            "position": "after"
+          },
+          {
+            "pattern": "@ui/**",
+            "group": "external",
+            "position": "after"
+          },
+          {
+            "pattern": "@lib/**",
+            "group": "external",
+            "position": "after"
+          },
+          {
+            "pattern": "@actions/**",
+            "group": "external",
+            "position": "after"
+          },
+          {
+            "pattern": "@types/**",
+            "group": "external",
+            "position": "after"
+          },
+          {
+            "pattern": "@hooks/**",
+            "group": "external",
+            "position": "after"
+          },
+          {
+            "pattern": "@public/**",
+            "group": "external",
+            "position": "after"
+          }
+        ],
+        "newlines-between": "always-and-inside-groups",
+        "pathGroupsExcludedImportTypes": ["react"]
       }
     ]
   }

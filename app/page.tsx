@@ -2,9 +2,11 @@ import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 import Image from 'next/image';
 
-import WorkInProgress from '@/public/work-in-progress.svg';
-import { authOptions } from '@/lib/auth';
-import { Public } from '@/components/public';
+import { Public } from '@components/public';
+
+import { authOptions } from '@lib/auth';
+
+import WorkInProgress from '@public/work-in-progress.svg';
 
 export default async function HomePage() {
   const session = await getServerSession(authOptions);
@@ -14,12 +16,12 @@ export default async function HomePage() {
   }
 
   return (
-    <main className="flex flex-col-reverse items-center justify-center w-full gap-8 mx-auto w-sceen max-w-7xl md:flex-row">
-      <div className="flex items-center justify-center p-5 md:w-full md:h-screen">
+    <main className="w-sceen mx-auto flex w-full max-w-7xl flex-col-reverse items-center justify-center gap-8 p-5 lg:flex-row">
+      <div className="flex items-center justify-center lg:h-screen lg:w-full">
         <Public />
       </div>
 
-      <div className="flex items-center justify-center w-full p-4 bg-white md:mb-4">
+      <div className="flex w-full items-center justify-center bg-white p-4 lg:mb-4">
         <Image src={WorkInProgress} priority className="object-contain" alt="work in progress" />
       </div>
     </main>

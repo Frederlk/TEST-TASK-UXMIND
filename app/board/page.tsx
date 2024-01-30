@@ -1,4 +1,4 @@
-import { NoTask } from '@/components/task/no-task';
+import { NoTask } from '@components/no-task';
 
 export default async function BoardPage() {
   return <NoTask />;

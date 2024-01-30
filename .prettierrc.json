@@ -5,5 +5,6 @@
   "singleQuote": true,
   "printWidth": 100,
   "proseWrap": "preserve",
-  "jsxSingleQuote": false
+  "jsxSingleQuote": false,
+  "plugins": ["prettier-plugin-tailwindcss"]
 }

@@ -1,7 +1,8 @@
 import type { Task } from '@prisma/client';
-import type { ActionState } from '@/lib/create-safe-action';
 
 import { z } from 'Zod';
+
+import type { ActionState } from '@lib/create-safe-action';
 
 import { UpdateTask } from './schema';
 

@@ -1,21 +1,24 @@
 import type { ReactNode } from 'react';
+
 import type { Metadata } from 'next';
 
 import { Inter } from 'next/font/google';
 
 import './globals.css';
 
-import { cn } from '@/lib/utils';
-import { Toaster } from '@/components/ui/toaster';
-import { NextAuthProvider } from '@/components/providers/next-auth-provider';
-import { QueryProvider } from '@/components/providers/query-provider';
-import { ModalProvider } from '@/components/providers/modal-provider';
+import { NextAuthProvider } from '@components/providers/next-auth-provider';
+import { QueryProvider } from '@components/providers/query-provider';
+import { ModalProvider } from '@components/providers/modal-provider';
+
+import { Toaster } from '@ui/toaster';
+
+import { cn } from '@lib/utils';
 
 const inter = Inter({
   subsets: ['latin', 'cyrillic', 'cyrillic-ext'],
   display: 'swap',
   variable: '--font-poppins',
-  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+  weight: ['400', '600', '700'],
 });
 
 export const metadata: Metadata = {

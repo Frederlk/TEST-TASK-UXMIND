@@ -1,5 +1,7 @@
 'use client';
 
+import type { AuthUser } from '@types';
+
 import { signOut } from 'next-auth/react';
 
 import {
@@ -9,13 +11,13 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
-import { UserType } from '@/types';
-import { getFirstLastNameInitials } from '@/lib/utils';
+} from '@ui/dropdown-menu';
+import { Avatar, AvatarFallback, AvatarImage } from '@ui/avatar';
+import { Button } from '@ui/button';
 
-export const BoardHeader = ({ user }: { user: UserType }) => {
+import { getFirstLastNameInitials } from '@lib/utils';
+
+export const BoardHeader = ({ user }: { user: AuthUser }) => {
   const handleSignOut = () => () => signOut({ callbackUrl: '/auth' });
 
   return (
@@ -27,8 +29,8 @@ export const BoardHeader = ({ user }: { user: UserType }) => {
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button className="relative w-10 h-10 rounded-md ">
-            <Avatar className="w-10 h-10 rounded-md ">
+          <Button className="relative h-10 w-10 rounded-md ">
+            <Avatar className="h-10 w-10 rounded-md ">
               <AvatarImage src={user.image || undefined} />
               <AvatarFallback className="rounded-md bg-neutral-800 text-primary">
                 {getFirstLastNameInitials(user.name)}

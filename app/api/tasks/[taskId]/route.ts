@@ -1,17 +1,9 @@
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
 
-import { db } from '@/lib/db';
-import { authOptions } from '@/lib/auth';
+import { db } from '@lib/db';
 
 export async function GET(req: Request, { params }: { params: { taskId: string } }) {
   try {
-    const session = getServerSession(authOptions);
-
-    if (!session) {
-      return new NextResponse('Unauthorized', { status: 401 });
-    }
-
     const task = await db.task.findUnique({
       where: {
         id: params.taskId,
@@ -43,10 +35,6 @@ export async function GET(req: Request, { params }: { params: { taskId: string }
         },
       },
     });
-
-    if (!task) {
-      return new NextResponse('Not Found', { status: 404 });
-    }
 
     return NextResponse.json(task);
   } catch (error) {

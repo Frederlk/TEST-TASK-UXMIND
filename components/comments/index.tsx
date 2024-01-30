@@ -1,4 +1,4 @@
-import { FullTask } from '@/types';
+import type { FullTask } from '@types';
 
 import { AddCommentForm } from './add-comment-form';
 import { CommentsList } from './comments-list';

@@ -1,8 +1,8 @@
-import { Spinner } from '@/components/ui/spinner';
+import { Spinner } from '@ui/spinner';
 
 export default function LoadingPage() {
   return (
-    <div className="flex items-center justify-center p-5 md:w-full md:h-screen">
+    <div className="flex h-screen w-full items-center justify-center p-5">
       <Spinner />
     </div>
   );

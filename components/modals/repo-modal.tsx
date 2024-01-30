@@ -1,39 +1,35 @@
 import Link from 'next/link';
 import { Github, Home } from 'lucide-react';
 
-import { useRepoModal } from '@/hooks/use-repo-modal';
-import { useGitHubRepoDetails } from '@/hooks/use-github';
+import { NotFound } from '@components/not-found';
 
-import { Dialog, DialogContent } from '../ui/dialog';
-import { NotFound } from '../not-found';
-import { Spinner } from '../ui/spinner';
+import { Spinner } from '@ui/spinner';
+import { Dialog, DialogContent } from '@ui/dialog';
+
+import { useRepoModal } from '@hooks/use-repo-modal';
+import { useGitHubRepoDetails } from '@hooks/use-github';
 
 export const RepoModal = () => {
-  const { isOpen, onClose, onOpen, repoId } = useRepoModal();
+  const { isOpen, onClose, repoId } = useRepoModal();
   const { isRepoLoading, repo, repoError } = useGitHubRepoDetails(repoId);
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="border-none bg-neutral-800 max-w-md p-0 overflow-hidden">
+      <DialogContent className="max-w-md overflow-hidden border-none bg-neutral-800 p-0">
         <div className="space-y-4 p-4">
           {isRepoLoading ? (
-            <div className="w-full h-full flex flex-col items-center justify-center">
+            <div className="flex h-full w-full flex-col items-center justify-center">
               <Spinner />
             </div>
           ) : null}
-          {repoError && !isRepoLoading ? (
-            <NotFound
-              status={repoError?.response?.status}
-              title={repoError?.response?.statusText}
-            />
-          ) : null}
+          {repoError && !isRepoLoading ? <NotFound title={repoError?.message} /> : null}
 
           {repo ? (
             <>
-              <h2 className="font-semibold text-xl text-primary">{repo.name}</h2>
+              <h2 className="text-xl font-semibold text-primary">{repo.name}</h2>
               <p className="text-xs font-semibold text-neutral-400">{repo.description}</p>
               <div className="text-neutral-400">
-                <ul className="pl-4 text-sm list-disc">
+                <ul className="list-disc pl-4 text-sm">
                   {repo.forks ? (
                     <li>
                       <b>Forks:</b> {repo.forks}
@@ -70,19 +66,19 @@ export const RepoModal = () => {
                 {repo.htmlUrl ? (
                   <Link
                     href={repo.htmlUrl}
-                    className="flex text-sm text-white gap-x-2 items-center hover:text-primary"
+                    className="flex items-center gap-x-2 text-sm text-white hover:text-primary"
                     target="_blank"
                   >
-                    <Github className="w-4 h-4" /> GitHub Link
+                    <Github className="h-4 w-4" /> GitHub Link
                   </Link>
                 ) : null}
                 {repo.homepage ? (
                   <Link
                     href={repo.homepage}
-                    className="flex text-sm text-white gap-x-2 items-center hover:text-primary"
+                    className="flex items-center gap-x-2 text-sm text-white hover:text-primary"
                     target="_blank"
                   >
-                    <Home className="w-4 h-4" /> Homepage Link
+                    <Home className="h-4 w-4" /> Homepage Link
                   </Link>
                 ) : null}
               </div>

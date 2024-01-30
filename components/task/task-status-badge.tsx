@@ -1,23 +1,21 @@
 'use client';
 
-import { Task, TaskStatus } from '@prisma/client';
+import type { Task, TaskStatus } from '@prisma/client';
+
 import { useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 
-import { taskStatusToBadgeVariant, taskStatusToText } from '@/lib/task-status';
-import { Badge, badgeVariants } from '@/components/ui/badge';
-import { useAction } from '@/hooks/use-action';
-import { updateTaskStatus } from '@/actions/update-task-status';
-import { toast } from '@/components/ui/use-toast';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { Spinner } from '@/components/ui/spinner';
-import { STATUS_ITEMS } from '@/lib/filters';
+import { Badge, badgeVariants } from '@ui/badge';
+import { toast } from '@ui/use-toast';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@ui/select';
+import { Spinner } from '@ui/spinner';
+
+import { taskStatusToBadgeVariant, taskStatusToText } from '@lib/task-status';
+import { STATUS_ITEMS } from '@lib/filters';
+
+import { updateTaskStatus } from '@actions/update-task-status';
+
+import { useAction } from '@hooks/use-action';
 
 export const TaskStatusBadge = ({ task, isEdit }: { task: Task; isEdit?: boolean }) => {
   const session = useSession();
@@ -64,7 +62,7 @@ export const TaskStatusBadge = ({ task, isEdit }: { task: Task; isEdit?: boolean
     <Select value={task.status} onValueChange={(value) => unUpdateStatus(value)}>
       <SelectTrigger className={badgeVariants({ variant: taskStatusToBadgeVariant[task.status] })}>
         {isUpdating ? (
-          <Spinner className="w-4 h-4 fill-black" />
+          <Spinner className="h-4 w-4 fill-black" />
         ) : (
           <SelectValue placeholder={taskStatusToText[task.status]} />
         )}

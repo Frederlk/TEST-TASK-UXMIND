@@ -5,9 +5,10 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { Task } from '@prisma/client';
 
-import { cn, displayDate, displayValue } from '@/lib/utils';
-import { D_M_Y } from '@/lib/date-formats';
-import { TaskStatusBadge } from '@/components/task/task-status-badge';
+import { TaskStatusBadge } from '@components/task/task-status-badge';
+
+import { cn, displayDate, displayValue } from '@lib/utils';
+import { D_M_Y } from '@lib/date-formats';
 
 export const BoardTaskItem = ({ task }: { task: Task }) => {
   const params = useParams();
@@ -20,22 +21,22 @@ export const BoardTaskItem = ({ task }: { task: Task }) => {
       <Link
         href={`/board/task/${task.id}`}
         className={cn(
-          'block w-full p-2 space-y-2 transition border  hover:border-white border-neutral-400',
+          'block w-full space-y-2 border border-neutral-400 p-2  transition hover:border-white',
           task.id === taskId && 'border-white',
         )}
       >
         <h4
           className={cn(
-            'text-sm font-semibold line-clamp-1 text-white transition',
+            'line-clamp-1 text-sm font-semibold text-white transition',
             task.id === taskId && 'text-primary',
           )}
         >
           {task.title}
         </h4>
-        <p className="text-xs text-neutral-400 line-clamp-2">
+        <p className="line-clamp-2 text-xs text-neutral-400">
           {displayValue(task.description, 'No description')}
         </p>
-        <div className="flex items-center gap-x-2 justify-between">
+        <div className="flex items-center justify-between gap-x-2">
           <div className={cn('text-xs text-muted-foreground', taskExpired && 'text-red-500')}>
             {!task.startDate && !task.endDate
               ? 'No due dates'

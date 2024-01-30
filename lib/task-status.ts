@@ -1,6 +1,6 @@
-import type { BadgeProps } from '@/components/ui/badge';
-
 import { TaskStatus } from '@prisma/client';
+
+import type { BadgeProps } from '@ui/badge';
 
 export const taskStatusToText: {
   [key in TaskStatus]: string;

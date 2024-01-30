@@ -1,23 +1,26 @@
-import { getServerSession } from 'next-auth';
 import { ReactNode } from 'react';
 
-import { Board } from '@/components/board';
-import { Separator } from '@/components/ui/separator';
-import { Public } from '@/components/public';
-import { authOptions } from '@/lib/auth';
+import { getServerSession } from 'next-auth';
+
+import { Board } from '@components/board';
+import { Public } from '@components/public';
+
+import { Separator } from '@ui/separator';
+
+import { authOptions } from '@lib/auth';
 
 export default async function BoardLayout({ children }: { children: ReactNode }) {
   const session = await getServerSession(authOptions);
 
   return (
-    <main className="space-y-6 p-5 md:space-y-0 md:w-full md:flex md:items-start md:h-screen md:mx-auto md:overflow-hidden md:max-w-7xl">
-      <div className="md:h-full md:px-5 md:basis-2/5 md:overflow-y-auto md:shrink-0 md:scrollbar-thin md:scrollbar-thumb-primary md:scrollbar-track-transparent">
+    <main className="space-y-6 p-5 lg:mx-auto lg:flex lg:h-screen lg:w-full lg:max-w-7xl lg:items-start lg:space-y-0 lg:overflow-hidden">
+      <div className="lg:h-full lg:shrink-0 lg:basis-2/5 lg:overflow-y-auto lg:px-5 lg:scrollbar-thin lg:scrollbar-track-transparent lg:scrollbar-thumb-primary">
         {session?.user ? <Board user={session.user} /> : <Public />}
       </div>
 
-      <Separator orientation="horizontal" className="bg-neutral-400 md:h-full md:w-[1px]" />
+      <Separator orientation="horizontal" className="bg-neutral-400 lg:h-full lg:w-[1px]" />
 
-      <div className="md:w-full md:h-full md:px-5  md:overflow-y-auto md:scrollbar-thin md:scrollbar-thumb-primary md:scrollbar-track-transparent">
+      <div className="lg:h-full lg:w-full lg:overflow-y-auto  lg:px-5 lg:scrollbar-thin lg:scrollbar-track-transparent lg:scrollbar-thumb-primary">
         {children}
       </div>
     </main>

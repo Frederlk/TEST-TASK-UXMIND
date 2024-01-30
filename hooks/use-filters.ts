@@ -1,7 +1,7 @@
 import { create, StateCreator } from 'zustand';
-import { persist, PersistOptions, createJSONStorage } from 'zustand/middleware';
+import { persist, type PersistOptions, createJSONStorage } from 'zustand/middleware';
 
-import { DEFAULT_FILTER_BY_STATUS, DEFAULT_SEARCH_BY_FILTERS } from '@/lib/filters';
+import { DEFAULT_FILTER_BY_STATUS, DEFAULT_SEARCH_BY_FILTERS } from '@lib/filters';
 
 export type Filters = {
   query: string;

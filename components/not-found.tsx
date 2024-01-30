@@ -1,5 +1,6 @@
-import Link from 'next/link';
 import { ReactNode } from 'react';
+
+import Link from 'next/link';
 
 import { Button } from './ui/button';
 
@@ -13,11 +14,11 @@ interface NotFoundProps {
 }
 
 export const NotFound = ({ status, title = 'Something went wrong', button }: NotFoundProps) => (
-  <div className="p-5 flex h-full w-full flex-col justify-center items-center">
+  <div className="flex h-full w-full flex-col items-center justify-center p-5">
     {status ? (
-      <p className="mb-2 text-4xl font-semibold text-center text-primary md:text-5xl">{status}</p>
+      <p className="mb-2 text-center text-4xl font-semibold text-primary lg:text-5xl">{status}</p>
     ) : null}
-    {title ? <p className="mb-8 text-3xl text-center text-white md:text-4xl">{title}</p> : null}
+    {title ? <p className="mb-8 text-center text-3xl text-white lg:text-4xl">{title}</p> : null}
     {button ? (
       <Button className="text-lg font-semibold" asChild>
         <Link href={button.link}>{button.text}</Link>

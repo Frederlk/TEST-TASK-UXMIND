@@ -1,15 +1,16 @@
 'use client';
 
-import { signIn } from 'next-auth/react';
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
-import { z } from 'Zod';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
 
-import { toast } from '@/components/ui/use-toast';
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import { signIn } from 'next-auth/react';
+import { FormProvider, type SubmitHandler, useForm } from 'react-hook-form';
+import { z } from 'Zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+import { toast } from '@ui/use-toast';
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@ui/form';
+import { Input } from '@ui/input';
+import { Button } from '@ui/button';
 
 const authSchema = z.object({
   email: z.string().min(1, { message: 'Email is required' }).email({

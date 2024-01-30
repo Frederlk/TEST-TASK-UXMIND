@@ -2,10 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { TaskStatus } from '@prisma/client';
 
-import { db } from '@/lib/db';
-import { authOptions } from '@/lib/auth';
-import { Filters } from '@/hooks/use-filters';
-import { SearchByFilters } from '@/lib/filters';
+import { db } from '@lib/db';
+import { authOptions } from '@lib/auth';
+import { SearchByFilters } from '@lib/filters';
+
+import { Filters } from '@hooks/use-filters';
 
 export async function POST(req: NextRequest) {
   try {
@@ -14,9 +15,7 @@ export async function POST(req: NextRequest) {
     if (!session) {
       return new NextResponse('Unauthorized', { status: 401 });
     }
-
-    const data = await req.json();
-    const filters: Filters = data.data;
+    const filters: Filters = await req.json();
     const userId = session.user.id || '';
     const query = filters.query;
     const searchByDescription = filters.fields.includes(SearchByFilters.DESCRIPTION);

@@ -1,35 +1,37 @@
 'use client';
 
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+import { type Dispatch, type SetStateAction, useState } from 'react';
+
+import type { FullTask } from '@types';
+
+import { FormProvider, type SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
-import { CalendarIcon, Check, ChevronsUpDown, Info, LinkIcon, X } from 'lucide-react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { Dispatch, SetStateAction, useState } from 'react';
-import axios from 'axios';
+import { CalendarIcon, Check, ChevronsUpDown, Info, X } from 'lucide-react';
+import { useQueryClient } from '@tanstack/react-query';
 import { useDebounce } from 'usehooks-ts';
-import Link from 'next/link';
 
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { cn } from '@/lib/utils';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Textarea } from '@/components/ui/textarea';
-import { toast } from '@/components/ui/use-toast';
-import { Calendar } from '@/components/ui/calendar';
-import { CreateTask } from '@/actions/create-task/schema';
-import { createTask } from '@/actions/create-task';
-import { useAction } from '@/hooks/use-action';
-import { InputType as CreateTaskInputType } from '@/actions/create-task/types';
-import { FullTask } from '@/types';
-import { updateTask } from '@/actions/update-task';
-import { D_M_Y } from '@/lib/date-formats';
-import { useGitHubRepoDetails, useSearchGitHubRepos } from '@/hooks/use-github';
-import { useRepoModal } from '@/hooks/use-repo-modal';
+import { Button } from '@ui/button';
+import { Input } from '@ui/input';
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@ui/form';
+import { Popover, PopoverContent, PopoverTrigger } from '@ui/popover';
+import { Textarea } from '@ui/textarea';
+import { toast } from '@ui/use-toast';
+import { Calendar } from '@ui/calendar';
 
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '../ui/command';
-import { RepoModal } from '../modals/repo-modal';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '@ui/command';
+
+import { cn } from '@lib/utils';
+import { D_M_Y } from '@lib/date-formats';
+
+import { CreateTask } from '@actions/create-task/schema';
+import { createTask } from '@actions/create-task';
+import { InputType as CreateTaskInputType } from '@actions/create-task/types';
+import { updateTask } from '@actions/update-task';
+
+import { useAction } from '@hooks/use-action';
+import { useSearchGitHubRepos } from '@hooks/use-github';
+import { useRepoModal } from '@hooks/use-repo-modal';
 
 interface TaskFormActions {
   task?: FullTask;
@@ -147,7 +149,7 @@ export const TaskForm = ({ task, isEditing, setIsEditing }: TaskFormActions) => 
                   disabled={formIsDisabled}
                   placeholder="Enter a description"
                   className={cn(
-                    'md:min-h-40 disabled:cursor-default disabled:opacity-80',
+                    'disabled:cursor-default disabled:opacity-80 lg:min-h-40',
                     field.value ? 'min-h-[70dvh]' : 'min-h-[30dvh]',
                   )}
                   {...field}
@@ -162,15 +164,15 @@ export const TaskForm = ({ task, isEditing, setIsEditing }: TaskFormActions) => 
           name="repoId"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <div className="flex items-center gap-x-2 justify-between">
+              <div className="flex items-center justify-between gap-x-2">
                 <FormLabel>GitHub Repo</FormLabel>
                 {field.value ? (
                   <div
                     role="button"
                     onClick={() => onOpen(field.value || 0)}
-                    className="flex text-sm text-white items-center gap-x-2 hover:text-primary transition-colors"
+                    className="flex items-center gap-x-2 text-sm text-white transition-colors hover:text-primary"
                   >
-                    <Info className="w-4 h-4" />
+                    <Info className="h-4 w-4" />
                     Check repo details
                   </div>
                 ) : null}
@@ -182,7 +184,7 @@ export const TaskForm = ({ task, isEditing, setIsEditing }: TaskFormActions) => 
                       variant="input"
                       role="combobox"
                       className={cn(
-                        'w-full font-normal text-white justify-between',
+                        'w-full justify-between font-normal text-white',
                         !field.value && 'text-neutral-400',
                       )}
                     >
@@ -242,7 +244,7 @@ export const TaskForm = ({ task, isEditing, setIsEditing }: TaskFormActions) => 
                         )}
                       >
                         {field.value ? format(field.value, D_M_Y) : <span>Pick a start date</span>}
-                        <CalendarIcon className="w-4 h-4 ml-auto opacity-50" />
+                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
@@ -285,7 +287,7 @@ export const TaskForm = ({ task, isEditing, setIsEditing }: TaskFormActions) => 
                         )}
                       >
                         {field.value ? format(field.value, D_M_Y) : <span>Pick an end date</span>}
-                        <CalendarIcon className="w-4 h-4 ml-auto opacity-50" />
+                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
@@ -313,18 +315,18 @@ export const TaskForm = ({ task, isEditing, setIsEditing }: TaskFormActions) => 
           />
         </div>
         {!formIsDisabled ? (
-          <div className="w-full flex gap-x-2 justify-end ">
+          <div className="flex w-full justify-end gap-x-2 ">
             <Button
               onClick={onCancelClick()}
               variant="outline"
-              className="w-auto md:w-auto"
+              className="w-auto lg:w-auto"
               disabled={isSubmitting || isLoading}
             >
               {isEditing ? 'Cancel' : 'Reset'}
             </Button>
             <Button
               type="submit"
-              className="w-auto md:w-auto"
+              className="w-auto lg:w-auto"
               disabled={!isValid || isSubmitting || isLoading}
             >
               {isSubmitting || isLoading ? 'Submitting...' : 'Submit'}

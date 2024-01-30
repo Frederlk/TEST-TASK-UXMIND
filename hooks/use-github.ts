@@ -1,7 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import axios, { AxiosError } from 'axios';
 
-import { toast } from '@/components/ui/use-toast';
+import { toast } from '@ui/use-toast';
+
+import { fetcher } from '@lib/fetcher';
 
 type SearchGithubPepo = {
   value: number;
@@ -27,30 +28,21 @@ const GITHUB_BASE_URL = 'https://api.github.com';
 
 export const useSearchGitHubRepos = (query: string) => {
   const {
-    data: repos,
+    data,
     error: reposError,
     isLoading: isReposLoading,
-  } = useQuery<SearchGithubPepo[], AxiosError>({
+  } = useQuery({
     queryKey: ['repo-search', query],
     retry: 1,
     enabled: !!(query && query.length >= 2),
-    queryFn: async () => {
-      const response = await axios.get(`${GITHUB_BASE_URL}/search/repositories`, {
-        params: {
-          q: query || '',
-          per_page: 10,
-        },
-      });
-
-      const results: SearchGithubPepo[] =
-        response.data.items.map((item: any) => ({
-          value: item.id,
-          label: item.name,
-        })) || [];
-
-      return results;
-    },
+    queryFn: () => fetcher(`${GITHUB_BASE_URL}/search/repositories?q=${query || ''}&per_page=10`),
   });
+
+  const repos: SearchGithubPepo[] =
+    data?.items.map((item: any) => ({
+      value: item.id,
+      label: item.name,
+    })) || [];
 
   if (reposError) {
     toast({
@@ -64,36 +56,32 @@ export const useSearchGitHubRepos = (query: string) => {
 
 export const useGitHubRepoDetails = (repoId: number | null | undefined) => {
   const {
-    data: repo,
+    data,
     error: repoError,
     isLoading: isRepoLoading,
-  } = useQuery<GithubPepo | null, AxiosError>({
+  } = useQuery({
     queryKey: ['repo-details', repoId],
     retry: 1,
     enabled: !!repoId,
-    queryFn: async () => {
-      const response = await axios.get(`${GITHUB_BASE_URL}/repositories/${repoId}`);
-
-      const repo: GithubPepo | null = response.data
-        ? {
-            id: response.data.id,
-            name: response.data.name,
-            htmlUrl: response.data.url,
-            description: response.data.description,
-            homepage: response.data.homepage,
-            language: response.data.language,
-            topics: response.data.topics,
-            forks: response.data.forks,
-            watchers: response.data.watchers,
-            stargazers_count: response.data.stargazers_count,
-            avatar_url: response.data.avatar_url,
-            visibility: response.data.visibility,
-          }
-        : null;
-
-      return repo;
-    },
+    queryFn: () => fetcher(`${GITHUB_BASE_URL}/repositories/${repoId}`),
   });
+
+  const repo: GithubPepo | null = data
+    ? {
+        id: data.id,
+        name: data.name,
+        htmlUrl: data.url,
+        description: data.description,
+        homepage: data.homepage,
+        language: data.language,
+        topics: data.topics,
+        forks: data.forks,
+        watchers: data.watchers,
+        stargazers_count: data.stargazers_count,
+        avatar_url: data.avatar_url,
+        visibility: data.visibility,
+      }
+    : null;
 
   if (repoError) {
     toast({

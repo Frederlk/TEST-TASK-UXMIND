@@ -2,11 +2,11 @@
 
 import { signIn } from 'next-auth/react';
 import Image from 'next/image';
-import React from 'react';
 import { Github } from 'lucide-react';
 
-import GoogleIcon from '@/public/google.svg';
-import { Button } from '@/components/ui/button';
+import { Button } from '@ui/button';
+
+import GoogleIcon from '@public/google.svg';
 
 export const AuthButtons = () => {
   const onGoogleSignIn = () => () => signIn('google', { callbackUrl: '/board' });
@@ -18,18 +18,18 @@ export const AuthButtons = () => {
         onClick={onGitHubSignIn()}
         variant="outline"
         size="icon"
-        className="flex items-center justify-center w-full px-2 gap-x-4"
+        className="flex w-full items-center justify-center gap-x-4 px-2"
       >
-        <Github className="w-6 h-6 -mr-2" />
+        <Github className="-mr-2 h-6 w-6" />
         GitHub
       </Button>
       <Button
         onClick={onGoogleSignIn()}
         variant="outline"
         size="icon"
-        className="flex items-center justify-center w-full px-2 gap-x-4"
+        className="flex w-full items-center justify-center gap-x-4 px-2"
       >
-        <Image src={GoogleIcon} alt="Google icon" className="w-10 h-10 -ml-2 -mr-4" />
+        <Image src={GoogleIcon} alt="Google icon" className="-ml-2 -mr-4 h-10 w-10" />
         Google
       </Button>
     </div>

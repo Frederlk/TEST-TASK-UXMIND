@@ -1,9 +1,10 @@
 'use client';
 
+import type { Dispatch, SetStateAction } from 'react';
+
 import { Copy, Link, MoreVertical, Pen, Trash, X } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { Dispatch, SetStateAction } from 'react';
 import { Task } from '@prisma/client';
 
 import {
@@ -13,13 +14,16 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { deleteTask } from '@/actions/delete-task';
-import { useAction } from '@/hooks/use-action';
-import { toast } from '@/components/ui/use-toast';
-import { Spinner } from '@/components/ui/spinner';
-import { copyTask } from '@/actions/copy-task';
-import { cn } from '@/lib/utils';
+} from '@ui/dropdown-menu';
+import { toast } from '@ui/use-toast';
+import { Spinner } from '@ui/spinner';
+
+import { cn } from '@lib/utils';
+
+import { deleteTask } from '@actions/delete-task';
+import { copyTask } from '@actions/copy-task';
+
+import { useAction } from '@hooks/use-action';
 
 interface TaskActionsProps {
   task: Task;
@@ -95,7 +99,7 @@ export const TaskActions = ({ task, isEditing, setIsEditing }: TaskActionsProps)
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <MoreVertical className="w-5 h-5 text-white cursor-pointer hover:text-primary" />
+        <MoreVertical className="h-5 w-5 cursor-pointer text-white hover:text-primary" />
       </DropdownMenuTrigger>
 
       <DropdownMenuContent className="w-56" align="end">
@@ -107,53 +111,53 @@ export const TaskActions = ({ task, isEditing, setIsEditing }: TaskActionsProps)
           <DropdownMenuItem
             onClick={onEdit()}
             className={cn(
-              'cursor-pointer flex items-center gap-x-2',
+              'flex cursor-pointer items-center gap-x-2',
               isEditing && 'focus:text-red-500',
             )}
           >
             {isEditing ? (
               <>
-                <X className="w-4 h-4" /> Stop Editing
+                <X className="h-4 w-4" /> Stop Editing
               </>
             ) : (
               <>
-                <Pen className="w-4 h-4" /> Edit
+                <Pen className="h-4 w-4" /> Edit
               </>
             )}
           </DropdownMenuItem>
         ) : null}
 
-        <DropdownMenuItem onClick={onCopy()} className="cursor-pointer flex items-center gap-x-2 ">
+        <DropdownMenuItem onClick={onCopy()} className="flex cursor-pointer items-center gap-x-2 ">
           {isCopying ? (
             <>
-              <Spinner className="w-4 h-4 fill-primary" /> Copying...
+              <Spinner className="h-4 w-4 fill-primary" /> Copying...
             </>
           ) : (
             <>
-              <Copy className="w-4 h-4" /> Copy
+              <Copy className="h-4 w-4" /> Copy
             </>
           )}
         </DropdownMenuItem>
 
         <DropdownMenuItem
           onClick={onCopyURL()}
-          className="cursor-pointer flex items-center gap-x-2 "
+          className="flex cursor-pointer items-center gap-x-2 "
         >
-          <Link className="w-4 h-4" /> Share URL
+          <Link className="h-4 w-4" /> Share URL
         </DropdownMenuItem>
 
         {userIsAuthor ? (
           <DropdownMenuItem
             onClick={onDelete()}
-            className="cursor-pointer flex items-center gap-x-2 focus:text-red-500"
+            className="flex cursor-pointer items-center gap-x-2 focus:text-red-500"
           >
             {isDeleting ? (
               <>
-                <Spinner className="w-4 h-4 fill-red-500" /> Deleting...
+                <Spinner className="h-4 w-4 fill-red-500" /> Deleting...
               </>
             ) : (
               <>
-                <Trash className="w-4 h-4" /> Delete
+                <Trash className="h-4 w-4" /> Delete
               </>
             )}
           </DropdownMenuItem>
