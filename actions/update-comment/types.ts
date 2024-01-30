@@ -1,6 +1,6 @@
 import type { Comment } from '@prisma/client';
 
-import { z } from 'Zod';
+import { z } from 'zod';
 
 import type { ActionState } from '@lib/create-safe-action';
 

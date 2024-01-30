@@ -1,4 +1,4 @@
-import { z } from 'Zod';
+import { z } from 'zod';
 
 export const CopyTask = z.object({
   id: z.string(),

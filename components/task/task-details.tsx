@@ -2,8 +2,6 @@
 
 import { useState } from 'react';
 
-import type { FullTask } from '@types';
-
 import { X } from 'lucide-react';
 import { useEventListener } from 'usehooks-ts';
 import Link from 'next/link';
@@ -14,6 +12,8 @@ import { Separator } from '@ui/separator';
 
 import { D_M_Y_TIME } from '@lib/date-formats';
 import { displayDate } from '@lib/utils';
+
+import type { FullTask } from '@types';
 
 import { TaskForm } from './task-form';
 import { TaskActions } from './task-actions';

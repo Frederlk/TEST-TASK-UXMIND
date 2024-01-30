@@ -2,12 +2,10 @@
 
 import { type Dispatch, type SetStateAction, useState } from 'react';
 
-import type { FullTask } from '@types';
-
 import { FormProvider, type SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
-import { CalendarIcon, Check, ChevronsUpDown, Info, X } from 'lucide-react';
+import { CalendarIcon, Check, ChevronsUpDown, Info } from 'lucide-react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useDebounce } from 'usehooks-ts';
 
@@ -32,6 +30,8 @@ import { updateTask } from '@actions/update-task';
 import { useAction } from '@hooks/use-action';
 import { useSearchGitHubRepos } from '@hooks/use-github';
 import { useRepoModal } from '@hooks/use-repo-modal';
+
+import type { FullTask } from '@types';
 
 interface TaskFormActions {
   task?: FullTask;

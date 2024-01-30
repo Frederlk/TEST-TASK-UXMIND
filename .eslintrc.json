@@ -1,5 +1,6 @@
 {
   "extends": "next/core-web-vitals",
+  "plugins": ["unused-imports"],
   "rules": {
     "import/no-extraneous-dependencies": "off",
     "react/destructuring-assignment": "off",
@@ -11,30 +12,12 @@
     "linebreak-style": "off",
     "@typescript-eslint/indent": "off",
     "no-duplicate-imports": "error",
+    "unused-imports/no-unused-imports": "warn",
     "import/order": [
       "error",
       {
-        "groups": [
-          "builtin",
-          "type",
-          "external",
-          "internal",
-          "parent",
-          "sibling",
-          "index",
-          "object"
-        ],
+        "groups": ["builtin", "external", "internal", "parent", "sibling", "index", "object"],
         "pathGroups": [
-          {
-            "pattern": "react",
-            "group": "builtin",
-            "position": "before"
-          },
-          {
-            "pattern": "next",
-            "group": "builtin",
-            "position": "before"
-          },
           {
             "pattern": "@components/**",
             "group": "external",
@@ -71,8 +54,7 @@
             "position": "after"
           }
         ],
-        "newlines-between": "always-and-inside-groups",
-        "pathGroupsExcludedImportTypes": ["react"]
+        "newlines-between": "always-and-inside-groups"
       }
     ]
   }

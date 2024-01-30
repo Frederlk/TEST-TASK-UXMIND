@@ -1,6 +1,5 @@
 'use client';
 
-import type { AuthUser } from '@types';
 
 import { signOut } from 'next-auth/react';
 
@@ -16,6 +15,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '@ui/avatar';
 import { Button } from '@ui/button';
 
 import { getFirstLastNameInitials } from '@lib/utils';
+
+import type { AuthUser } from '@types';
 
 export const BoardHeader = ({ user }: { user: AuthUser }) => {
   const handleSignOut = () => () => signOut({ callbackUrl: '/auth' });

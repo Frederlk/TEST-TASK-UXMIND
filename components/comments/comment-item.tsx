@@ -1,7 +1,5 @@
 import { type ElementRef, useRef, useState } from 'react';
 
-import type { CommentWithUser } from '@types';
-
 import { FormProvider, type SubmitHandler, useForm } from 'react-hook-form';
 import { useQueryClient } from '@tanstack/react-query';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -25,6 +23,8 @@ import { InputType as UpdateCommentInputType } from '@actions/update-comment/typ
 import { deleteComment } from '@actions/delete-comment';
 
 import { useAction } from '@hooks/use-action';
+
+import type { CommentWithUser } from '@types';
 
 export const CommentItem = ({ comment }: { comment: CommentWithUser }) => {
   // EDIT ACTION
