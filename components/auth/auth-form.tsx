@@ -1,10 +1,7 @@
 'use client';
 
-import { useEffect } from 'react';
-
 import { signIn } from 'next-auth/react';
-import { FormProvider, type SubmitHandler, useForm } from 'react-hook-form';
-import { z } from 'zod';
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { toast } from '@ui/use-toast';
@@ -12,53 +9,31 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@ui/fo
 import { Input } from '@ui/input';
 import { Button } from '@ui/button';
 
-const authSchema = z.object({
-  email: z.string().min(1, { message: 'Email is required' }).email({
-    message: 'Must be a valid email',
-  }),
-});
-
-type AuthSchema = z.infer<typeof authSchema>;
+import { SignIn } from '@actions/sign-in/schema';
+import { InputType as SignInInputType } from '@actions/sign-in/types';
 
 export const AuthForm = () => {
-  const form = useForm<AuthSchema>({
+  const form = useForm<SignInInputType>({
     mode: 'onChange',
-    resolver: zodResolver(authSchema),
+    resolver: zodResolver(SignIn),
     defaultValues: {
       email: '',
     },
   });
 
-  const {
-    reset,
-    formState: { isSubmitSuccessful, isSubmitting, isDirty, isValid },
-  } = form;
+  const { isSubmitting, isDirty, isValid } = form.formState;
 
-  const onSubmit: SubmitHandler<AuthSchema> = async (data) => {
-    const signInResult = await signIn('email', {
-      email: data.email,
+  const onSubmit: SubmitHandler<SignInInputType> = async ({ email }) => {
+    await signIn('email', {
+      email,
       callbackUrl: '/board',
     });
 
-    if (!signInResult?.ok) {
-      return toast({
-        title: 'Well this did not work...',
-        description: 'Something went wrong, please try again',
-        variant: 'destructive',
-      });
-    } else {
-      return toast({
-        title: 'Check your email',
-        description: 'A magic link has been sent to you',
-      });
-    }
+    return toast({
+      title: 'Check your email',
+      description: 'A magic link has been sent to you',
+    });
   };
-
-  useEffect(() => {
-    if (isSubmitSuccessful) {
-      reset();
-    }
-  }, [isSubmitSuccessful, reset]);
 
   return (
     <FormProvider {...form}>
