@@ -5,10 +5,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 
+import { FormTextarea } from '@components/form/form-textarea';
+
 import { toast } from '@ui/use-toast';
-import { FormControl, FormField, FormItem, FormMessage } from '@ui/form';
 import { Button } from '@ui/button';
-import { Textarea } from '@ui/textarea';
 import { Avatar, AvatarFallback, AvatarImage } from '@ui/avatar';
 
 import { getFirstLastNameInitials } from '@lib/utils';
@@ -34,6 +34,8 @@ export const AddCommentForm = ({ task }: { task: FullTask }) => {
   });
 
   const {
+    control,
+    handleSubmit,
     reset,
     formState: { isSubmitting, isDirty, isValid },
   } = form;
@@ -69,7 +71,7 @@ export const AddCommentForm = ({ task }: { task: FullTask }) => {
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
         <div className="flex w-full gap-x-2">
           <Avatar className="hidden h-8 w-8 rounded-md lg:block">
             <AvatarImage src={session?.data?.user.image || undefined} />
@@ -77,21 +79,15 @@ export const AddCommentForm = ({ task }: { task: FullTask }) => {
               {getFirstLastNameInitials(session?.data?.user.name)}
             </AvatarFallback>
           </Avatar>
-          <FormField
-            control={form.control}
+          <FormTextarea
+            control={control}
             name="message"
-            render={({ field }) => (
-              <FormItem className="relative grow">
-                <FormControl>
-                  <Textarea
-                    placeholder="Your message"
-                    className="min-h-20 resize-none"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage className="absolute" />
-              </FormItem>
-            )}
+            placeholder="Your message"
+            classNames={{
+              item: 'relative grow',
+              input: 'min-h-20 resize-none',
+              message: 'absolute',
+            }}
           />
         </div>
         <Button

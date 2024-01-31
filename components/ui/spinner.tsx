@@ -1,14 +1,19 @@
 import { cn } from '@lib/utils';
 
 interface SpinnerProps {
-  className?: string;
+  spinnerClassNames?: string;
+  variant?: 'screen' | 'container'
 }
 
-export const Spinner = ({ className }: SpinnerProps) => (
-  <div role="status">
+export const Spinner = ({ spinnerClassNames, variant }: SpinnerProps) => (
+  <div role="status" 
+  className={cn(
+    variant === 'screen' && "flex h-screen w-full items-center justify-center p-5", 
+    variant === 'container' && "flex h-full w-full flex-col items-center justify-center"
+  )}>
     <svg
       aria-hidden="true"
-      className={cn('h-24 w-24 animate-spin fill-primary text-white', className)}
+      className={cn('h-24 w-24 animate-spin fill-primary text-white', spinnerClassNames)}
       viewBox="0 0 100 101"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

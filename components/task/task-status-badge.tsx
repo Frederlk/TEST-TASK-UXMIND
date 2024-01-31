@@ -1,9 +1,9 @@
 'use client';
 
-import type { Task, TaskStatus } from '@prisma/client';
-
 import { useQueryClient } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
+
+import type { Task, TaskStatus } from '@prisma/client';
 
 import { Badge, badgeVariants } from '@ui/badge';
 import { toast } from '@ui/use-toast';
@@ -62,7 +62,7 @@ export const TaskStatusBadge = ({ task, isEdit }: { task: Task; isEdit?: boolean
     <Select value={task.status} onValueChange={(value) => unUpdateStatus(value)}>
       <SelectTrigger className={badgeVariants({ variant: taskStatusToBadgeVariant[task.status] })}>
         {isUpdating ? (
-          <Spinner className="h-4 w-4 fill-black" />
+          <Spinner spinnerClassNames="h-4 w-4 text-black" />
         ) : (
           <SelectValue placeholder={taskStatusToText[task.status]} />
         )}

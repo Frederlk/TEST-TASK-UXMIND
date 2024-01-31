@@ -7,6 +7,11 @@ export type AuthUser = {
   image?: string | null;
 };
 
+export interface OptionsItem {
+  value: any;
+  label: any;
+}
+
 export type CommentWithUser = Comment & { user: User };
 
 export type FullTask = Task & { comments: CommentWithUser[]; user: User };

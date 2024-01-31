@@ -29,9 +29,7 @@ export const BoardTaskList = () => {
 
   if (isLoading) {
     return (
-      <div className="flex h-full w-full flex-col items-center justify-center">
-        <Spinner />
-      </div>
+        <Spinner variant='container' />
     );
   }
 

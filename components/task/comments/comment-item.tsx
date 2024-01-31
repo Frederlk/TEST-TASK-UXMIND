@@ -7,9 +7,9 @@ import { useEventListener, useOnClickOutside } from 'usehooks-ts';
 import { Check, Pen, Trash, X } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 
+import { FormTextarea } from '@components/form/form-textarea';
+
 import { Avatar, AvatarFallback, AvatarImage } from '@ui/avatar';
-import { FormControl, FormField, FormItem, FormMessage } from '@ui/form';
-import { Textarea } from '@ui/textarea';
 import { Button } from '@ui/button';
 import { toast } from '@ui/use-toast';
 import { Spinner } from '@ui/spinner';
@@ -41,6 +41,8 @@ export const CommentItem = ({ comment, taskUserId }: CommentItemProps) => {
   });
 
   const {
+    control,
+    handleSubmit,
     reset,
     formState: { isSubmitting, isValid },
   } = form;
@@ -95,7 +97,6 @@ export const CommentItem = ({ comment, taskUserId }: CommentItemProps) => {
   };
 
   // DELETE ACTION
-
   const { execute: executeDelete, isLoading: isDeleting } = useAction(deleteComment, {
     onSuccess: () => {
       toast({
@@ -140,7 +141,7 @@ export const CommentItem = ({ comment, taskUserId }: CommentItemProps) => {
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => form.handleSubmit(onSubmit)()}
+                onClick={() => handleSubmit(onSubmit)()}
                 disabled={isUpdating || isSubmitting || !isValid}
                 className={cn(
                   'invisible h-6 w-6 opacity-0 transition',
@@ -149,7 +150,7 @@ export const CommentItem = ({ comment, taskUserId }: CommentItemProps) => {
                 )}
               >
                 {isUpdating || isSubmitting ? (
-                  <Spinner className="h-4 w-4 fill-green-500" />
+                  <Spinner spinnerClassNames="h-4 w-4 text-green-500" />
                 ) : (
                   <Check className="h-5 w-5" />
                 )}
@@ -176,7 +177,7 @@ export const CommentItem = ({ comment, taskUserId }: CommentItemProps) => {
                 )}
               >
                 {isDeleting ? (
-                  <Spinner className="h-4 w-4 fill-destructive" />
+                  <Spinner spinnerClassNames="h-4 w-4 text-destructive" />
                 ) : (
                   <Trash className="h-4 w-4" />
                 )}
@@ -187,21 +188,13 @@ export const CommentItem = ({ comment, taskUserId }: CommentItemProps) => {
         {isEditing ? (
           <FormProvider {...form}>
             <form>
-              <FormField
-                control={form.control}
+              <FormTextarea
+                control={control}
                 name="message"
-                render={({ field }) => (
-                  <FormItem className="relative">
-                    <FormControl>
-                      <Textarea
-                        placeholder="Your message"
-                        className="min-h-20 resize-none"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                placeholder="Your message"
+                classNames={{
+                  input: 'min-h-20 resize-none',
+                }}
               />
             </form>
           </FormProvider>

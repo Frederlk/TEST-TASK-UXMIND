@@ -6,7 +6,7 @@ import { X } from 'lucide-react';
 import { useEventListener } from 'usehooks-ts';
 import Link from 'next/link';
 
-import { Comments } from '@components/comments';
+import { Comments } from '@components/task/comments';
 
 import { Separator } from '@ui/separator';
 
@@ -32,12 +32,13 @@ export const TaskDetails = ({ task }: { task: FullTask }) => {
   return (
     <div className="space-y-4">
       <div className="flex items-start justify-between gap-x-4">
-        <div className="flex items-center gap-x-1">
-          <h2 className="text-white">{isEditing && 'Editing '} Task Details</h2>
+        <div className="flex items-center gap-x-1 ">
+          <h2 className="text-white">Task Details</h2>
           <TaskActions task={task} isEditing={isEditing} setIsEditing={setIsEditing} />
+          {isEditing && <span className="text-primary">Editing</span>}
         </div>
 
-        <Link href="/board" className="text-white hover:text-destructive">
+        <Link href="/board" className="text-white transition hover:text-destructive">
           <X className="h-6 w-6" />
         </Link>
       </div>

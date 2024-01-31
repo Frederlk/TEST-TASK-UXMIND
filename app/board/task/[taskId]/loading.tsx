@@ -1,9 +1,7 @@
 import { Spinner } from '@ui/spinner';
 
-export default function taskIdLoading() {
+export default function TaskIdLoading() {
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center">
-      <Spinner />
-    </div>
+      <Spinner variant='container'/>
   );
 }

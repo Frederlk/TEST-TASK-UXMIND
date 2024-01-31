@@ -26,7 +26,7 @@ export const BoardFilters = () => {
 
   useEffect(() => {
     setQuery(debouncedQuery);
-  }, [debouncedQuery]);
+  }, [debouncedQuery, setQuery]);
 
   return (
     <Accordion type="single" collapsible>

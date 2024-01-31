@@ -4,9 +4,9 @@ import { signIn } from 'next-auth/react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
+import { FormInput } from '@components/form/form-input';
+
 import { toast } from '@ui/use-toast';
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@ui/form';
-import { Input } from '@ui/input';
 import { Button } from '@ui/button';
 
 import { SignIn } from '@actions/sign-in/schema';
@@ -38,18 +38,11 @@ export const AuthForm = () => {
   return (
     <FormProvider {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <FormField
+        <FormInput
           control={form.control}
           name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input placeholder="name@example.com" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
+          label="Email"
+          placeholder="name@example.com"
         />
         <Button type="submit" className="w-full" disabled={!(isDirty && isValid) || isSubmitting}>
           {isSubmitting ? 'Submitting...' : 'Sign in with Email'}

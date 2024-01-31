@@ -18,7 +18,7 @@ export default async function TaskFormPage() {
     <div className="space-y-4">
       <div className="flex items-center justify-between gap-x-8 text-white">
         <h2>Create New Task</h2>
-        <Link href="/board" className="hover:text-destructive">
+        <Link href="/board" className="transition hover:text-destructive">
           <X className="h-6 w-6 " />
         </Link>
       </div>

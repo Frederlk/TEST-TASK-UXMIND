@@ -7,6 +7,8 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Task } from '@prisma/client';
 
+import { useQueryClient } from '@tanstack/react-query';
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,6 +36,7 @@ interface TaskActionsProps {
 export const TaskActions = ({ task, isEditing, setIsEditing }: TaskActionsProps) => {
   const session = useSession();
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   // COPY ACTION
   const { execute: executeCopy, isLoading: isCopying } = useAction(copyTask, {
@@ -41,6 +44,7 @@ export const TaskActions = ({ task, isEditing, setIsEditing }: TaskActionsProps)
       toast({
         title: `Task copied`,
       });
+      queryClient.invalidateQueries({ queryKey: ['task'] });
     },
     onError: (error) => {
       toast({
@@ -62,6 +66,7 @@ export const TaskActions = ({ task, isEditing, setIsEditing }: TaskActionsProps)
       toast({
         title: `Task deleted`,
       });
+      queryClient.invalidateQueries({ queryKey: ['task'] });
       router.push('/board');
     },
     onError: (error) => {
@@ -130,7 +135,7 @@ export const TaskActions = ({ task, isEditing, setIsEditing }: TaskActionsProps)
         <DropdownMenuItem onClick={onCopy()} className="flex cursor-pointer items-center gap-x-2 ">
           {isCopying ? (
             <>
-              <Spinner className="h-4 w-4 fill-primary" /> Copying...
+              <Spinner spinnerClassNames="h-4 w-4 text-primary" /> Copying...
             </>
           ) : (
             <>
@@ -153,7 +158,7 @@ export const TaskActions = ({ task, isEditing, setIsEditing }: TaskActionsProps)
           >
             {isDeleting ? (
               <>
-                <Spinner className="h-4 w-4 fill-destructive" /> Deleting...
+                <Spinner spinnerClassNames="h-4 w-4 text-destructive" /> Deleting...
               </>
             ) : (
               <>

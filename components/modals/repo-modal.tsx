@@ -18,9 +18,7 @@ export const RepoModal = () => {
       <DialogContent className="max-w-md overflow-hidden border-none bg-neutral-800 p-0">
         <div className="space-y-4 p-4">
           {isRepoLoading && (
-            <div className="flex h-full w-full flex-col items-center justify-center">
-              <Spinner />
-            </div>
+              <Spinner variant='container'/>
           )}
 
           {repoError && !isRepoLoading && <NotFound title={repoError?.message} />}
