@@ -123,7 +123,7 @@ export const CommentItem = ({ comment, taskUserId }: CommentItemProps) => {
   return (
     <li className="group flex w-full gap-x-2" ref={commentRef}>
       <Avatar className="h-8 w-8 rounded-md">
-        <AvatarImage src={comment.user.image || undefined} />
+        <AvatarImage src={comment.user.image || undefined} alt={comment.user.name || 'Avatar'} />
         <AvatarFallback className="rounded-md bg-neutral-800 text-primary">
           {getFirstLastNameInitials(comment.user.name)}
         </AvatarFallback>

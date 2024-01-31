@@ -74,7 +74,10 @@ export const AddCommentForm = ({ task }: { task: FullTask }) => {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
         <div className="flex w-full gap-x-2">
           <Avatar className="hidden h-8 w-8 rounded-md lg:block">
-            <AvatarImage src={session?.data?.user.image || undefined} />
+            <AvatarImage
+              src={session?.data?.user.image || undefined}
+              alt={session?.data?.user.name || 'Avatar'}
+            />
             <AvatarFallback className="rounded-md bg-neutral-800 text-primary">
               {getFirstLastNameInitials(session?.data?.user.name)}
             </AvatarFallback>

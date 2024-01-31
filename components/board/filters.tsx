@@ -40,7 +40,7 @@ export const BoardFilters = () => {
           />
 
           <AccordionTrigger asChild>
-            <Button variant="outline">
+            <Button variant="outline" aria-label="Filters">
               <SlidersHorizontal className="h-6 w-6 transition" />
             </Button>
           </AccordionTrigger>

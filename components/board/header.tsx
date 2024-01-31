@@ -29,9 +29,9 @@ export const BoardHeader = ({ user }: { user: AuthUser }) => {
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button className="relative h-10 w-10 rounded-md ">
+          <Button className="relative h-10 w-10 rounded-md" aria-label="User menu">
             <Avatar className="h-10 w-10 rounded-md ">
-              <AvatarImage src={user.image || undefined} />
+              <AvatarImage src={user.image || undefined} alt={user.name || 'Avatar'} />
               <AvatarFallback className="rounded-md bg-neutral-800 text-primary">
                 {getFirstLastNameInitials(user.name)}
               </AvatarFallback>

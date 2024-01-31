@@ -60,7 +60,10 @@ export const TaskStatusBadge = ({ task, isEdit }: { task: Task; isEdit?: boolean
 
   return (
     <Select value={task.status} onValueChange={(value) => unUpdateStatus(value)}>
-      <SelectTrigger className={badgeVariants({ variant: taskStatusToBadgeVariant[task.status] })}>
+      <SelectTrigger
+        className={badgeVariants({ variant: taskStatusToBadgeVariant[task.status] })}
+        aria-label="Change status"
+      >
         {isUpdating ? (
           <Spinner spinnerClassNames="h-4 w-4 text-black" />
         ) : (

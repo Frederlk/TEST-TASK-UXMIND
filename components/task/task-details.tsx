@@ -38,7 +38,11 @@ export const TaskDetails = ({ task }: { task: FullTask }) => {
           {isEditing && <span className="text-primary">Editing</span>}
         </div>
 
-        <Link href="/board" className="text-white transition hover:text-destructive">
+        <Link
+          href="/board"
+          className="text-white transition hover:text-destructive"
+          aria-label="Close"
+        >
           <X className="h-6 w-6" />
         </Link>
       </div>
