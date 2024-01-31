@@ -77,6 +77,7 @@ export const FormCombobox = <T extends FieldValues>({
                   <Button
                     variant="input"
                     role="combobox"
+                    aria-label="Open search"
                     className={cn(
                       'w-full justify-between font-normal text-white disabled:cursor-default disabled:opacity-80',
                       classNames?.input,

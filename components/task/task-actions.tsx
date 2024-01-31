@@ -103,7 +103,7 @@ export const TaskActions = ({ task, isEditing, setIsEditing }: TaskActionsProps)
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+      <DropdownMenuTrigger asChild aria-label="Actions">
         <MoreVertical className="h-5 w-5 cursor-pointer text-white hover:text-primary" />
       </DropdownMenuTrigger>
 
