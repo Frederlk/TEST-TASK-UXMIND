@@ -1,6 +1,5 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
 import { getServerSession } from 'next-auth';
 
 import { db } from '@lib/db';
@@ -38,7 +37,6 @@ const handler = async (data: InputType): Promise<ReturnType> => {
     };
   }
 
-  revalidatePath(`/board/task/${id}`);
   return { data: task };
 };
 
